@@ -1,7 +1,10 @@
 import React from "react";
+import "./styles.css";
 
 function Nav() {
   return (
+      <>
+      <img className="header-img"  src="/assets/images/header.jpg" />
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <a className="navbar-brand mr-5" href="/">
         Palmetto Gardens
@@ -49,6 +52,7 @@ function Nav() {
     </div>
      
     </nav>
+    </>
   );
 }
 
