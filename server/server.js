@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
+// Requiring our models for syncing
+const db = require("./models");
 
 // Set the port of our application
 // process.env.PORT lets the port be set by Heroku
@@ -16,6 +18,8 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "../client/build/index.html"));
 })
 
-app.listen(PORT, function(){
-    console.log(`Listening on port: ${PORT}`);
+db.sequelize.sync({ force: true }).then(function () {
+    app.listen(PORT, function () {
+        console.log(`Listening on port: ${PORT}`);
+    })
 })
