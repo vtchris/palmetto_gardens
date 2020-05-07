@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const apiRoutes = require("./routes/apiRoutes");
 
 const app = express();
 // Requiring our models for syncing
@@ -17,6 +18,8 @@ app.use(express.json());
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "../client/build/index.html"));
 })
+// API Routes
+app.use("/api", apiRoutes);
 
 db.sequelize.sync({ force: true }).then(function () {
     app.listen(PORT, function () {
