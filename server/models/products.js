@@ -27,11 +27,19 @@ module.exports = function (sequlize, DataTypes) {
         },
         taxable:{
             type: DataTypes.BOOLEAN,
-            defaultValue: true
+            defaultValue: true 
         },
         active:{
             type: DataTypes.BOOLEAN,
             defaultValue: true
+        },
+        createdAt:{
+            type: DataTypes.DATE,
+            defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
+        },
+        updatedAt:{
+            type: DataTypes.DATE,
+            defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         }
     });
     return Products;
