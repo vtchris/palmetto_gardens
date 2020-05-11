@@ -8,39 +8,44 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.STRING(75),
             allowNull: true,
             validate: {
-                len: [1,75]
-              }
+                len: [1, 75]
+            }
         },
-        itm_cost:{
+        itm_cost: {
             type: DataTypes.DOUBLE,
-            allowNull: false,            
+            allowNull: false,
             defaultValue: 0
         },
-        itm_prc:{
+        itm_prc: {
             type: DataTypes.DOUBLE,
-            allowNull: false,            
+            allowNull: false,
             defaultValue: 0
         },
-        itm_unit_of_measure:{
+        itm_unit_of_measure: {
             type: DataTypes.STRING,
-            allowNull: false,  
+            allowNull: false,
         },
-        taxable:{
-            type: DataTypes.BOOLEAN,
-            defaultValue: true 
-        },
-        active:{
+        taxable: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
         },
-        createdAt:{
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
+        },
+        createdAt: {
             type: DataTypes.DATE,
             defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         },
-        updatedAt:{
+        updatedAt: {
             type: DataTypes.DATE,
             defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         }
     });
+    Products.associate = function (models) {
+
+        Products.belongsTo(models.Categories, { constraints: false })
+    }
+
     return Products;
 }
