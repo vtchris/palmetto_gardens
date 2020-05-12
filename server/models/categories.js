@@ -7,6 +7,17 @@ module.exports = function (sequlize, DataTypes) {
                 len: [1, 75]
             }
         },
+        img: {
+            type: DataTypes.STRING(150),
+            allowNull: true,
+            validate: {
+                len: [1, 150]
+            }
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
+        },
         createdAt: {
             type: DataTypes.DATE,
             defaultValue: sequlize.literal('CURRENT_TIMESTAMP')

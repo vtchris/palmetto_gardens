@@ -11,11 +11,11 @@ VALUES (
         '(704) 555-1111',
         .06 );
 		
-INSERT INTO categories (category)
-VALUES 	('Landscapint materials'), 
-		('Firewood'), 
-        ('Produce'), 
-       	('Gift Baskets'); 
+INSERT INTO categories (category, img)
+VALUES 	('Landscapint materials','https://unsplash.com/photos/pk0du67cX4o'), 
+		('Firewood','https://unsplash.com/photos/VfJ600bfjdc'), 
+        ('Produce','https://unsplash.com/photos/suH2bDfi8SU'), 
+       	('Gift Baskets','https://unsplash.com/photos/v1jvKg284vo'); 
 
 INSERT INTO products (itm_name, itm_nbr, itm_cost, itm_prc, itm_unit_of_measure, taxable, active,CategoryId)
 VALUES 	('Pine needles - Premium Carolina Native Longleaf', 100, 3, 4.5, 'bale',true,true,1), 
