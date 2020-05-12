@@ -21,7 +21,7 @@ app.get("/", function (req, res) {
 // API Routes
 app.use("/api", apiRoutes);
 
-db.sequelize.sync({ force: true }).then(function () {
+db.sequelize.sync({ force: false }).then(function () {
     app.listen(PORT, function () {
         console.log(`Listening on port: ${PORT}`);
     })
