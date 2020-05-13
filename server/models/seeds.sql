@@ -12,10 +12,10 @@ VALUES (
         .06 );
 		
 INSERT INTO categories (category, img)
-VALUES 	('Landscapint materials','https://unsplash.com/photos/pk0du67cX4o'), 
-		('Firewood','https://unsplash.com/photos/VfJ600bfjdc'), 
-        ('Produce','https://unsplash.com/photos/suH2bDfi8SU'), 
-       	('Gift Baskets','https://unsplash.com/photos/v1jvKg284vo'); 
+VALUES 	('Landscaping materials','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT2bUzkOMLfQ64nQ5ExyxKZMKQ4SIbwVVPMLxk2HpIxJw-FXoAa&usqp=CAU'), 
+		('Firewood','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSSaY2UkGk8onq_COeeXY1vHjuC8md5OpLSOJwkmPCkEoj4lodU&usqp=CAU'), 
+        ('Produce','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQzmuKqP7fSuyiLj_eaG2WuciOAZfrJc0e2hbLPFF8qGyvNyn4T&usqp=CAU'), 
+       	('Gift Baskets','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRHWgL-CAnvBIYRpIx0WSug3DVfrmogkKgz8bUHGvwcOXcUugALcQpH9S3uSJdmpOmqAr9GQyo&usqp=CAc'); 
 
 INSERT INTO products (itm_name, itm_nbr, itm_cost, itm_prc, itm_unit_of_measure, taxable, active,CategoryId)
 VALUES 	('Pine needles - Premium Carolina Native Longleaf', 100, 3, 4.5, 'bale',true,true,1), 
