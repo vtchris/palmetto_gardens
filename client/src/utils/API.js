@@ -1,8 +1,11 @@
 import axios from "axios";
 
-export default {    
-    getProductsActive: function(){
+export default {
+    getCategories: function () {
+        return axios.get('/api/categories')
+    },
+    getProductsActive: function () {
         return axios.get('/api/products/active')
-    } 
+    }
 }
 
