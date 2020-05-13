@@ -4,12 +4,22 @@ import Product from "../components/Product"
 
 class Order extends Component {
   state = {
+    categories: [],
     products:[]
   };
   componentDidMount() {
-    API.getProductsActive().then((response) => {
-      console.log(response.data)
-      this.setState({products: response.data});
+    let newState = this.state;
+    
+    API.getProductsActive().then(respProd => {
+      newState.products = respProd.data;
+      let cats = respProd.data.map(prod => prod.CategoryId)      
+
+      API.getCategories().then(respCat => {        
+        newState.categories = respCat.data.filter(cat => cats.includes(cat.id))
+        this.setState(newState);
+        console.log(this.state)
+      })
+      
     }).catch(err => { console.log(err)})
   }
 
