@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import API from "../utils/API";
 import Product from "../components/Product";
+import ProductSummary from "../components/ProductSummary";
 import Category from "../components/Category";
 
 class Order extends Component {
@@ -75,7 +76,7 @@ class Order extends Component {
           </div>
           <div className="row">
             {this.state.products.map((prod) => (
-              <Product
+              <ProductSummary
                 key={prod.id}
                 name={prod.itm_name}
                 price={prod.itm_prc}
