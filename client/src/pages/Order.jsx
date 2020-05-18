@@ -81,6 +81,7 @@ class Order extends Component {
                 name={prod.itm_name}
                 img={prod.itm_img}
                 price={prod.itm_prc}
+                desc={prod.itm_description}
                 unit={prod.itm_unit_of_measure}
               />
             ))}
