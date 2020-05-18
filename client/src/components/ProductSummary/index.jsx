@@ -1,9 +1,9 @@
 import React from "react";
 
-function ProductSummary({ name, img, price, desc, unit }) {
+function ProductSummary({ id, name, img, price, desc, unit, onClick }) {
   return (
-    <div className="card m-2">
-      <div className="card-body text-left">
+    <div id={id} className="card m-2">
+      <div className="card-body text-left" onClick={onClick}>
         <div className="container">
           <div className="row">
             <div className="col col-12">
@@ -25,8 +25,7 @@ function ProductSummary({ name, img, price, desc, unit }) {
                 ? desc.substring(0, 40) + `...` 
                 : desc
                 : ""}
-              </div>
-            
+              </div>            
             </div>
         </div>
       </div>
