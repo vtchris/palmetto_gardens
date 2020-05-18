@@ -79,6 +79,7 @@ class Order extends Component {
               <ProductSummary
                 key={prod.id}
                 name={prod.itm_name}
+                img={prod.itm_img}
                 price={prod.itm_prc}
                 unit={prod.itm_unit_of_measure}
               />

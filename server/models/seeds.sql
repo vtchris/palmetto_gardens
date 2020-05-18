@@ -18,7 +18,7 @@ VALUES 	('Landscaping materials','https://encrypted-tbn0.gstatic.com/images?q=tb
        	('Gift Baskets','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRHWgL-CAnvBIYRpIx0WSug3DVfrmogkKgz8bUHGvwcOXcUugALcQpH9S3uSJdmpOmqAr9GQyo&usqp=CAc'); 
 
 INSERT INTO products (itm_name, itm_nbr,itm_img, itm_cost, itm_prc, itm_unit_of_measure, itm_description, taxable,  active,CategoryId)
-VALUES 	('Pine needles', 100, '../assets/imgages/products/pinestraw.jpg', 3, 4.5, 'bale','We use only the best premium Carolina Native Longleaf pine straw. For best results spread new pine straw once or twice a year.',true,true,1), 
+VALUES 	('Pine needles', 100, 'assets/imgages/products/pinestraw.jpg', 3, 4.5, 'bale','We use only the best premium Carolina Native Longleaf pine straw. For best results spread new pine straw once or twice a year.',true,true,1), 
 		('Red Mulch', 200,null, 2, 4.99, '2 cu ft',null, true,true,1),
 		('Black Mulch', 210,null, 2, 4.99, '2 cu ft',null,true,true,1),
 		('Brown Mulch', 220,null, 2, 4.99, '2 cu ft',null,true,true,1),		      
