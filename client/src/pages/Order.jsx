@@ -10,6 +10,8 @@ class Order extends Component {
     allProducts: [],
     category: 0,
     products: [],
+    product: [],
+    cart: [],
   };
   componentDidMount() {
     let newState = this.state;
@@ -35,14 +37,29 @@ class Order extends Component {
   handleCategoryClick = (e) => {
     const newState = this.state;
     const cat = +e.target.dataset.id;
+   
+    console.log('***NEW STATE')
+    console.log(newState)
 
     newState.category = cat;
-    newState.products = newState.allProducts.filter(
+    let stupid = this.state.allProducts
+    console.log(cat)
+    newState.products = stupid.filter(
       (prod) => prod.CategoryId === cat
     );
 
     console.log(newState);
     this.setState(newState);
+  };
+  handleProductClick = (e) => {
+    
+    const newState = this.state;
+    const id = +e.currentTarget.parentNode.getAttribute("id");
+    
+    newState.product = [newState.allProducts.find(prod => prod.id === id)];
+    newState.products = [];
+    this.setState(newState);
+    console.log(newState)
   };
 
   render() {
@@ -75,16 +92,35 @@ class Order extends Component {
             ))}
           </div>
           <div className="row">
-            {this.state.products.map((prod) => (
-              <ProductSummary
-                key={prod.id}
-                name={prod.itm_name}
-                img={prod.itm_img}
-                price={prod.itm_prc}
-                desc={prod.itm_description}
-                unit={prod.itm_unit_of_measure}
-              />
-            ))}
+            { this.state.products.length > 0 ?
+              this.state.products.map((prod) => (
+                <ProductSummary
+                  key={prod.id}
+                  id={prod.id}
+                  name={prod.itm_name}
+                  img={prod.itm_img}
+                  price={prod.itm_prc}
+                  desc={prod.itm_description}
+                  unit={prod.itm_unit_of_measure}
+                  onClick={this.handleProductClick}
+                />
+              ))
+            :
+            this.state.product              
+              .map((prod) => (
+                <Product 
+                  key={prod.id} 
+                  id={prod.id}
+                  name={prod.itm_name}
+                  img={prod.itm_img}
+                  price={prod.itm_prc}
+                  desc={prod.itm_description}
+                  unit={prod.itm_unit_of_measure}
+                  ></Product>
+              ))
+            }
+            
+            
           </div>
         </div>
       </>
