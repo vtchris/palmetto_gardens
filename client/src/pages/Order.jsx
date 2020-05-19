@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import API from "../utils/API";
+import Category from "../components/Category";
 import Product from "../components/Product";
 import ProductSummary from "../components/ProductSummary";
-import Category from "../components/Category";
 
 class Order extends Component {
   state = {
@@ -11,17 +11,21 @@ class Order extends Component {
     category: 0,
     products: [],
     product: [],
+    qty: 0,
     cart: [],
   };
   componentDidMount() {
     let newState = this.state;
 
+    // Get active products
     API.getProductsActive()
       .then((respProd) => {
         newState.allProducts = respProd.data;
         let cats = respProd.data.map((prod) => prod.CategoryId);
 
+        // Get ALL categories
         API.getCategories().then((respCat) => {
+          // Filter categories to show only active categories with products
           newState.categories = respCat.data.filter(
             (cat) => cat.active && cats.includes(cat.id)
           );
@@ -36,32 +40,44 @@ class Order extends Component {
   }
   handleCategoryClick = (e) => {
     const newState = this.state;
+    // Get selected category id
     const cat = +e.target.dataset.id;
-   
-    console.log('***NEW STATE')
-    console.log(newState)
-
     newState.category = cat;
-    let stupid = this.state.allProducts
-    console.log(cat)
-    newState.products = stupid.filter(
-      (prod) => prod.CategoryId === cat
-    );
+    const prods = this.state.allProducts;
 
-    console.log(newState);
+    // Get products in seleceted category
+    newState.products = prods.filter((prod) => prod.CategoryId === cat);
+
     this.setState(newState);
   };
   handleProductClick = (e) => {
-    
     const newState = this.state;
+    // Get the id of the selected product
     const id = +e.currentTarget.parentNode.getAttribute("id");
-    
-    newState.product = [newState.allProducts.find(prod => prod.id === id)];
-    newState.products = [];
-    this.setState(newState);
-    console.log(newState)
-  };
 
+    // Get the matching product object
+    newState.product = [newState.allProducts.find((prod) => prod.id === id)];
+    // Clear the state products list so they will no longer be displayed
+    newState.products = [];
+
+    this.setState(newState);
+    console.log(newState);
+  };
+  handleQtyChange = (e) => {
+    // Get qty entered, remove decimals
+    const qty = e.target.value.replace(/\./gi, "");
+    this.setState({ qty: qty });
+  };
+  handleAddToCart = (e) => {
+    e.preventDefault();
+    const newState = this.state;
+
+    // Get the selected product to add to the cart
+    const item = newState.product[0];
+    // Add the qty key with the requested qty
+    item.qty = +this.state.qty;
+    console.log(item);
+  };
   render() {
     return (
       <>
@@ -92,35 +108,33 @@ class Order extends Component {
             ))}
           </div>
           <div className="row">
-            { this.state.products.length > 0 ?
-              this.state.products.map((prod) => (
-                <ProductSummary
-                  key={prod.id}
-                  id={prod.id}
-                  name={prod.itm_name}
-                  img={prod.itm_img}
-                  price={prod.itm_prc}
-                  desc={prod.itm_description}
-                  unit={prod.itm_unit_of_measure}
-                  onClick={this.handleProductClick}
-                />
-              ))
-            :
-            this.state.product              
-              .map((prod) => (
-                <Product 
-                  key={prod.id} 
-                  id={prod.id}
-                  name={prod.itm_name}
-                  img={prod.itm_img}
-                  price={prod.itm_prc}
-                  desc={prod.itm_description}
-                  unit={prod.itm_unit_of_measure}
+            {this.state.products.length > 0
+              ? this.state.products.map((prod) => (
+                  <ProductSummary
+                    key={prod.id}
+                    id={prod.id}
+                    name={prod.itm_name}
+                    img={prod.itm_img}
+                    price={prod.itm_prc}
+                    desc={prod.itm_description}
+                    unit={prod.itm_unit_of_measure}
+                    onClick={this.handleProductClick}
+                  />
+                ))
+              : this.state.product.map((prod) => (
+                  <Product
+                    key={prod.id}
+                    id={prod.id}
+                    name={prod.itm_name}
+                    img={prod.itm_img}
+                    qty={this.state.qty}
+                    price={prod.itm_prc}
+                    desc={prod.itm_description}
+                    unit={prod.itm_unit_of_measure}
+                    onChange={this.handleQtyChange}
+                    onClick={this.handleAddToCart}
                   ></Product>
-              ))
-            }
-            
-            
+                ))}
           </div>
         </div>
       </>
