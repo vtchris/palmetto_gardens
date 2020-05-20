@@ -1,10 +1,11 @@
 import React from "react";
+import LineItem from "../LineItem";
 
 function Product(props) {
   return (
-    <div className="container">
+    <div className="container no-gutters">
       <div className="row">
-        <div className="col col-lg-8 col-12">
+        <div className="col col-lg-7 col-12">
           <form>
             <div className="form-group">
               <div className="row">
@@ -24,10 +25,20 @@ function Product(props) {
                   <br />
                   <p>{`$${props.price.toFixed(2)} per ${props.unit}`}</p>
                   <div className="form-group">
-                    <input type="number" className="text-right" pattern="[0-9]" value={props.qty} onChange={props.onChange}></input>
+                    <input
+                      type="number"
+                      className="text-right"
+                      pattern="[0-9]"
+                      value={props.qty}
+                      onChange={props.onChange}
+                    ></input>
                   </div>
                   <div className="form-group">
-                    <button className="btn btn-lg btn-success" data-id={props.id} onClick={props.onClick}>
+                    <button
+                      className="btn btn-lg btn-success"
+                      data-id={props.id}
+                      onClick={props.onClick}
+                    >
                       <span className="fas fa-cart-plus mr-3"></span> Add to
                       Cart
                     </button>
@@ -37,8 +48,14 @@ function Product(props) {
             </div>
           </form>
         </div>
-        <div className="col col-lg-4 col-12 border border-secondary rounded">
+        <div className="col col-lg-5 col-12 border border-secondary rounded">
           <h3>Shopping Cart</h3>
+          {!props.cart[0]
+            ? ""
+            : props.cart.map(itm => <LineItem key={itm.id} name={itm.itm_name} qty={itm.qty} prc={itm.itm_prc}></LineItem>)
+            
+            
+          }
         </div>
       </div>
     </div>

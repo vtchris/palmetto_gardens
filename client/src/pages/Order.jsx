@@ -3,6 +3,7 @@ import API from "../utils/API";
 import Category from "../components/Category";
 import Product from "../components/Product";
 import ProductSummary from "../components/ProductSummary";
+import LineItem from "../components/LineItem";
 
 class Order extends Component {
   state = {
@@ -77,6 +78,8 @@ class Order extends Component {
     // Add the qty key with the requested qty
     item.qty = +this.state.qty;
     console.log(item);
+    newState.cart.push(item)
+    this.setState(newState)
   };
   render() {
     return (
@@ -133,6 +136,7 @@ class Order extends Component {
                     unit={prod.itm_unit_of_measure}
                     onChange={this.handleQtyChange}
                     onClick={this.handleAddToCart}
+                    cart={this.state.cart}
                   ></Product>
                 ))}
           </div>
