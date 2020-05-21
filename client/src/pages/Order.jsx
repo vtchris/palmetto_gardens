@@ -3,7 +3,7 @@ import API from "../utils/API";
 import Category from "../components/Category";
 import Product from "../components/Product";
 import ProductSummary from "../components/ProductSummary";
-import LineItem from "../components/LineItem";
+//import LineItem from "../components/LineItem";
 
 class Order extends Component {
   state = {
@@ -14,6 +14,7 @@ class Order extends Component {
     product: [],
     qty: 0,
     cart: [],
+    invoice: {}
   };
   componentDidMount() {
     let newState = this.state;
@@ -79,8 +80,32 @@ class Order extends Component {
     item.qty = +this.state.qty;
     console.log(item);
     newState.cart.push(item)
+    
+    this.updateInvoice(newState);
+    
+  };
+  updateInvoice = (newState) => {
+    // Total all items, and apply sales tax
+    const taxable = this.totalItems(newState.cart, true);
+    const tax = (taxable * .06).toFixed(2);
+    const nontaxable = this.totalItems(newState.cart, false);
+    const total = (+taxable + +tax + +nontaxable).toFixed(2);
+    const invoice = {
+      subtotal: (+taxable + +nontaxable).toFixed(2),
+      tax: tax,
+      total: total
+    }
+    newState.invoice = invoice;
+    console.log(newState)
     this.setState(newState)
   };
+  totalItems = (items,taxable) => {
+    // Filter and total items based on taxable status
+    const total = items
+                  .filter(item => taxable ? item.taxable : !item.taxable)
+                  .reduce((t,item) => t + +(item.itm_prc * item.qty).toFixed(2) ,0);        
+    return total;
+  }
   render() {
     return (
       <>
@@ -137,6 +162,7 @@ class Order extends Component {
                     onChange={this.handleQtyChange}
                     onClick={this.handleAddToCart}
                     cart={this.state.cart}
+                    invoice={this.state.invoice}
                   ></Product>
                 ))}
           </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import LineItem from "../LineItem";
+import InvoiceFooter from "../InvoiceFooter";
 
 function Product(props) {
   return (
@@ -48,14 +49,15 @@ function Product(props) {
             </div>
           </form>
         </div>
-        <div className="col col-lg-5 col-12 border border-secondary rounded">
+        <div className="col col-lg-5 col-12 border border-secondary rounded card">
           <h3>Shopping Cart</h3>
           {!props.cart[0]
             ? ""
-            : props.cart.map(itm => <LineItem key={itm.id} name={itm.itm_name} qty={itm.qty} prc={itm.itm_prc}></LineItem>)
+          : props.cart.map(itm => <LineItem key={itm.id} name={itm.itm_name} qty={itm.qty} prc={itm.itm_prc} taxable={itm.taxable}> </LineItem>)
             
             
           }
+          {props.invoice.total ? <InvoiceFooter invoice={props.invoice}></InvoiceFooter> : ''}
         </div>
       </div>
     </div>
