@@ -53,11 +53,10 @@ function Product(props) {
           <h3>Shopping Cart</h3>
           {!props.cart[0]
             ? ""
-          : props.cart.map(itm => <LineItem key={itm.id} name={itm.itm_name} qty={itm.qty} prc={itm.itm_prc} taxable={itm.taxable}> </LineItem>)
-            
-            
+          : props.cart.map(itm => <LineItem key={itm.id} id={itm.id} name={itm.itm_name} qty={itm.qty} prc={itm.itm_prc} taxable={itm.taxable} onDelete={props.lineDelete} lineClick={props.lineClick}> </LineItem>)
+                        
           }
-          {props.invoice.total ? <InvoiceFooter invoice={props.invoice}></InvoiceFooter> : ''}
+          {props.cart[0] ? <InvoiceFooter invoice={props.invoice}></InvoiceFooter> : ''}
         </div>
       </div>
     </div>
