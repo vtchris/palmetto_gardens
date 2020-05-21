@@ -14,7 +14,7 @@ class Order extends Component {
     product: [],
     qty: 0,
     cart: [],
-    invoice: {}
+    invoice: {},
   };
   componentDidMount() {
     let newState = this.state;
@@ -57,8 +57,15 @@ class Order extends Component {
     // Get the id of the selected product
     const id = +e.currentTarget.parentNode.getAttribute("id");
 
-    // Get the matching product object
-    newState.product = [newState.allProducts.find((prod) => prod.id === id)];
+    // Get the matching product object if already in cart
+    let product = [newState.cart.find((prod) => prod.id === id)];
+    // Get the matching product object if not in cart
+    if (!product[0]) {
+      product = [newState.allProducts.find((prod) => prod.id === id)];
+    }
+    console.log(product);
+    newState.product = product;
+    newState.qty = product[0].qty || 0;
     // Clear the state products list so they will no longer be displayed
     newState.products = [];
 
@@ -68,44 +75,83 @@ class Order extends Component {
   handleQtyChange = (e) => {
     // Get qty entered, remove decimals
     const qty = e.target.value.replace(/\./gi, "");
-    this.setState({ qty: qty });
+    this.setState({ qty: Math.abs(qty) });
   };
   handleAddToCart = (e) => {
     e.preventDefault();
+
+    // Don't add zero qty
+    if (!this.state.qty) return;
+
     const newState = this.state;
 
     // Get the selected product to add to the cart
     const item = newState.product[0];
-    // Add the qty key with the requested qty
-    item.qty = +this.state.qty;
+
+    // Determine if item is already in cart
+    const idx = this.state.cart.findIndex((itm) => itm.id === item.id);
+    if (idx > -1) {
+      // If item is in cart, update qty
+      console.log(idx);
+      newState.cart[idx].qty = +this.state.qty;
+    } else {
+      // Add the qty key with the requested qty
+      item.qty = +this.state.qty;
+      newState.cart.push(item);
+    }
+
     console.log(item);
-    newState.cart.push(item)
-    
+
     this.updateInvoice(newState);
-    
+  };
+  handleDelete = (e) => {
+    e.stopPropagation();
+    const newState = this.state;
+
+    // Get id of line item being deleted
+    const id = e.currentTarget.dataset.id;
+
+    // Get index of the item in the cart
+    const idx = newState.cart.findIndex((item) => item.id == id);
+    // Remove item from cart
+    newState.cart.splice(idx, 1);
+
+    // Update invoice
+    this.updateInvoice(newState);
+  };
+  handleLineItemClick = (e) => {
+    const newState = this.state;
+
+    const id = e.currentTarget.dataset.id;
+    // Get index of the item in the cart
+    const idx = newState.cart.findIndex((item) => item.id == id);
+    const item = newState.cart[idx];
+    newState.product =  [item];
+    newState.qty = item.qty;
+    this.setState(newState);
   };
   updateInvoice = (newState) => {
     // Total all items, and apply sales tax
     const taxable = this.totalItems(newState.cart, true);
-    const tax = (taxable * .06).toFixed(2);
+    const tax = (taxable * 0.06).toFixed(2);
     const nontaxable = this.totalItems(newState.cart, false);
     const total = (+taxable + +tax + +nontaxable).toFixed(2);
     const invoice = {
       subtotal: (+taxable + +nontaxable).toFixed(2),
       tax: tax,
-      total: total
-    }
+      total: total,
+    };
     newState.invoice = invoice;
-    console.log(newState)
-    this.setState(newState)
+    console.log(newState);
+    this.setState(newState);
   };
-  totalItems = (items,taxable) => {
+  totalItems = (items, taxable) => {
     // Filter and total items based on taxable status
     const total = items
-                  .filter(item => taxable ? item.taxable : !item.taxable)
-                  .reduce((t,item) => t + +(item.itm_prc * item.qty).toFixed(2) ,0);        
+      .filter((item) => (taxable ? item.taxable : !item.taxable))
+      .reduce((t, item) => t + +(item.itm_prc * item.qty).toFixed(2), 0);
     return total;
-  }
+  };
   render() {
     return (
       <>
@@ -162,6 +208,8 @@ class Order extends Component {
                     onChange={this.handleQtyChange}
                     onClick={this.handleAddToCart}
                     cart={this.state.cart}
+                    lineDelete={this.handleDelete}
+                    lineClick={this.handleLineItemClick}
                     invoice={this.state.invoice}
                   ></Product>
                 ))}
