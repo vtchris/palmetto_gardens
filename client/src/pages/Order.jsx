@@ -3,7 +3,6 @@ import API from "../utils/API";
 import Category from "../components/Category";
 import Product from "../components/Product";
 import ProductSummary from "../components/ProductSummary";
-//import LineItem from "../components/LineItem";
 
 class Order extends Component {
   state = {
@@ -32,8 +31,7 @@ class Order extends Component {
             (cat) => cat.active && cats.includes(cat.id)
           );
 
-          this.setState(newState);
-          console.log(this.state);
+          this.updateState(newState);            
         });
       })
       .catch((err) => {
@@ -49,8 +47,7 @@ class Order extends Component {
 
     // Get products in seleceted category
     newState.products = prods.filter((prod) => prod.CategoryId === cat);
-
-    this.setState(newState);
+    this.updateState(newState);   
   };
   handleProductClick = (e) => {
     const newState = this.state;
@@ -69,13 +66,14 @@ class Order extends Component {
     // Clear the state products list so they will no longer be displayed
     newState.products = [];
 
-    this.setState(newState);
-    console.log(newState);
+    this.updateState(newState);  
   };
   handleQtyChange = (e) => {
+    const newState = this.state;
     // Get qty entered, remove decimals
     const qty = e.target.value.replace(/\./gi, "");
-    this.setState({ qty: Math.abs(qty) });
+    newState.qty = Math.abs(qty);
+    this.updateState(newState);  
   };
   handleAddToCart = (e) => {
     e.preventDefault();
@@ -128,7 +126,7 @@ class Order extends Component {
     const item = newState.cart[idx];
     newState.product =  [item];
     newState.qty = item.qty;
-    this.setState(newState);
+    this.updateState(newState);  
   };
   updateInvoice = (newState) => {
     // Total all items, and apply sales tax
@@ -142,8 +140,7 @@ class Order extends Component {
       total: total,
     };
     newState.invoice = invoice;
-    console.log(newState);
-    this.setState(newState);
+    this.updateState(newState);  
   };
   totalItems = (items, taxable) => {
     // Filter and total items based on taxable status
@@ -152,6 +149,9 @@ class Order extends Component {
       .reduce((t, item) => t + +(item.itm_prc * item.qty).toFixed(2), 0);
     return total;
   };
+  updateState = (newState) => {
+    this.setState(newState);
+  }
   render() {
     return (
       <>
@@ -171,7 +171,7 @@ class Order extends Component {
           </div>
 
           <div className="row text-center">
-            {this.state.categories.map((cat) => (
+            {this.state.category ? '' : this.state.categories.map((cat) => (
               <Category
                 key={cat.id}
                 category={cat.category}
