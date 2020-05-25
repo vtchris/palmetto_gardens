@@ -6,7 +6,7 @@ import ProductSummary from "../components/ProductSummary";
 
 class Order extends Component {
   state = {
-    categories: [],
+    breadcrumb: { categories: [], categoryName: "", products: [] },
     allProducts: [],
     category: 0,
     products: [],
@@ -27,11 +27,11 @@ class Order extends Component {
         // Get ALL categories
         API.getCategories().then((respCat) => {
           // Filter categories to show only active categories with products
-          newState.categories = respCat.data.filter(
+          newState.breadcrumb.categories = respCat.data.filter(
             (cat) => cat.active && cats.includes(cat.id)
           );
 
-          this.updateState(newState);            
+          this.updateState(newState);
         });
       })
       .catch((err) => {
@@ -43,11 +43,21 @@ class Order extends Component {
     // Get selected category id
     const cat = +e.target.dataset.id;
     newState.category = cat;
+    newState.breadcrumb.categoryName = newState.breadcrumb.categories.find(category => category.id === cat).category;
+   
+    // Get products in selected category
     const prods = this.state.allProducts;
-
-    // Get products in seleceted category
     newState.products = prods.filter((prod) => prod.CategoryId === cat);
-    this.updateState(newState);   
+    newState.breadcrumb.products = newState.products;       
+    
+    this.updateState(newState);
+  };
+  handleBreadcrumbClick = (e) => {
+    let newState = this.state;
+    console.log(e.currentTarget)
+    if(e.currentTarget.dataset.id === "cats"){newState.category = 0}
+    else { newState.products = newState.breadcrumb.products}
+    this.updateState(newState);
   };
   handleProductClick = (e) => {
     const newState = this.state;
@@ -66,14 +76,14 @@ class Order extends Component {
     // Clear the state products list so they will no longer be displayed
     newState.products = [];
 
-    this.updateState(newState);  
+    this.updateState(newState);
   };
   handleQtyChange = (e) => {
     const newState = this.state;
     // Get qty entered, remove decimals
     const qty = e.target.value.replace(/\./gi, "");
     newState.qty = Math.abs(qty);
-    this.updateState(newState);  
+    this.updateState(newState);
   };
   handleAddToCart = (e) => {
     e.preventDefault();
@@ -124,9 +134,9 @@ class Order extends Component {
     // Get index of the item in the cart
     const idx = newState.cart.findIndex((item) => item.id == id);
     const item = newState.cart[idx];
-    newState.product =  [item];
+    newState.product = [item];
     newState.qty = item.qty;
-    this.updateState(newState);  
+    this.updateState(newState);
   };
   updateInvoice = (newState) => {
     // Total all items, and apply sales tax
@@ -140,7 +150,7 @@ class Order extends Component {
       total: total,
     };
     newState.invoice = invoice;
-    this.updateState(newState);  
+    this.updateState(newState);
   };
   totalItems = (items, taxable) => {
     // Filter and total items based on taxable status
@@ -150,36 +160,35 @@ class Order extends Component {
     return total;
   };
   updateState = (newState) => {
+    console.log(newState)
     this.setState(newState);
-  }
+  };
   render() {
     return (
       <>
         <div className="container">
           <div className="row">
             <div className="col col-12 text-left">
-              <h1>
+              <h3>
                 {this.state.category
-                  ? `Shop: ${
-                      this.state.categories.filter(
-                        (cat) => cat.id === this.state.category
-                      )[0].category
-                    }`
-                  : `Shop`}
-              </h1>
+                  ? <><a href="#" data-id="cats" onClick={this.handleBreadcrumbClick}>Categories</a> > <a href="#" data-id="prods" onClick={this.handleBreadcrumbClick}>{this.state.breadcrumb.categoryName}</a></>                   
+                  : `Select a Category`}
+              </h3>
             </div>
           </div>
 
           <div className="row text-center">
-            {this.state.category ? '' : this.state.categories.map((cat) => (
-              <Category
-                key={cat.id}
-                category={cat.category}
-                id={cat.id}
-                img={cat.img}
-                onClick={this.handleCategoryClick}
-              ></Category>
-            ))}
+            {this.state.category
+              ? ""
+              : this.state.breadcrumb.categories.map((cat) => (
+                  <Category
+                    key={cat.id}
+                    category={cat.category}
+                    id={cat.id}
+                    img={cat.img}
+                    onClick={this.handleCategoryClick}
+                  ></Category>
+                ))}
           </div>
           <div className="row">
             {this.state.products.length > 0
