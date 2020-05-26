@@ -17,6 +17,16 @@ class Order extends Component {
   };
   componentDidMount() {
     let newState = this.state;
+    
+    API.getProductsActive().then(respProd => {
+      newState.products = respProd.data;
+      let cats = respProd.data.map(prod => prod.CategoryId)      
+
+      API.getCategories().then(respCat => {        
+        newState.categories = respCat.data.filter(cat => cats.includes(cat.id))
+        this.setState(newState);
+        console.log(this.state)
+
 
     // Get active products
     API.getProductsActive()
@@ -33,6 +43,7 @@ class Order extends Component {
 
           this.updateState(newState);
         });
+
       })
       .catch((err) => {
         console.log(err);
