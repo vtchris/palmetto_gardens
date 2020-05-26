@@ -14,6 +14,7 @@ function Product(props) {
                   <div className="col col-md-4 col-12 pull-left">
                     <img
                       src={props.img}
+                      alt={props.name}
                       className="img-fluid img-thumbnail rounded"
                     />
                   </div>
@@ -49,7 +50,7 @@ function Product(props) {
             </div>
           </form>
         </div>
-        <div className="col col-lg-5 col-12 border border-secondary rounded card">
+        <div className="col col-lg-5 col-12 border border-secondary rounded card cart">
           <h3>Shopping Cart</h3>
           {!props.cart[0]
             ? ""
