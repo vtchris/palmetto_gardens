@@ -11,6 +11,13 @@ module.exports = function (sequlize, DataTypes) {
                 len: [1, 75]
             }
         },
+        itm_img: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+            validate: {
+                len: [1, 255]
+            }
+        },
         itm_cost: {
             type: DataTypes.DOUBLE,
             allowNull: false,
@@ -28,6 +35,13 @@ module.exports = function (sequlize, DataTypes) {
         taxable: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
+        },
+        itm_description: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+            validate: {
+                len: [1, 255]
+            }
         },
         active: {
             type: DataTypes.BOOLEAN,

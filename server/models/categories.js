@@ -11,7 +11,7 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.STRING(150),
             allowNull: true,
             validate: {
-                len: [1, 150]
+                len: [1, 255]
             }
         },
         active: {

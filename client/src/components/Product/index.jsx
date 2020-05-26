@@ -1,8 +1,10 @@
 import React from "react";
+import LineItem from "../LineItem";
+import InvoiceFooter from "../InvoiceFooter";
 
 function Product(props) {
   return (
-<<<<<<< Updated upstream
+
     <div className="card border-secondary mb-3">
       {/* <div className="card-header"></div> */}
       <div className="card-body">
@@ -13,7 +15,7 @@ function Product(props) {
         <button className="btn btn-lg btn-success">
           <span className="fas fa-cart-plus mr-3"></span> Add to Cart
         </button>
-=======
+
     <div className="container no-gutters">
       <div className="row">
         <div className="col col-lg-7 col-12">
@@ -59,7 +61,9 @@ function Product(props) {
             </div>
           </form>
         </div>
+
         <div className="col col-lg-5 col-12 border border-secondary rounded card cart">
+
           <h3>Shopping Cart</h3>
           {!props.cart[0]
             ? ""
@@ -68,7 +72,7 @@ function Product(props) {
           }
           {props.cart[0] ? <InvoiceFooter invoice={props.invoice}></InvoiceFooter> : ''}
         </div>
->>>>>>> Stashed changes
+
       </div>
     </div>
   );
