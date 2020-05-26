@@ -168,7 +168,7 @@ class Order extends Component {
   updateInvoice = (newState) => {
     // Total all items, and apply sales tax
     const taxable = this.totalItems(newState.cart, true);
-    const tax = (taxable * 0.06).toFixed(2);
+    const tax = (taxable * this.state.tax).toFixed(2);
     const nontaxable = this.totalItems(newState.cart, false);
     const total = (+taxable + +tax + +nontaxable).toFixed(2);
     const invoice = {
