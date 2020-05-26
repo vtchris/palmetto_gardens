@@ -12,32 +12,34 @@ class Order extends Component {
     products: [],
     product: [],
     qty: 0,
+    tax: 0,
     cart: [],
     invoice: {},
   };
   componentDidMount() {
     let newState = this.state;
 
-    // Get active products
-    API.getProductsActive()
-      .then((respProd) => {
-        newState.allProducts = respProd.data;
-        let cats = respProd.data.map((prod) => prod.CategoryId);
+    Promise.all([
+      API.getSettings(),
+      API.getProductsActive(),
+      API.getCategories(),
+    ])
+      .then(([sets, prods, cats]) => {
+        newState.tax = sets.data[0].taxRate;
+        newState.allProducts = prods.data;
 
-        // Get ALL categories
-        API.getCategories().then((respCat) => {
-          // Filter categories to show only active categories with products
-          newState.breadcrumb.categories = respCat.data.filter(
-            (cat) => cat.active && cats.includes(cat.id)
-          );
+        // Filter categories to show only active categories with products
+        let prodCats = prods.data.map((prod) => prod.CategoryId);
+        newState.breadcrumb.categories = cats.data.filter(
+          (cat) => cat.active && prodCats.includes(cat.id)
+        );
 
-          this.updateState(newState);
-        });
+        this.updateState(newState);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  }
   handleAddToCart = (e) => {
     e.preventDefault();
 
@@ -88,7 +90,7 @@ class Order extends Component {
     newState.products = newState.breadcrumb.products;
 
     this.updateState(newState);
-  };  
+  };
   handleDelete = (e) => {
     e.stopPropagation();
     const newState = this.state;
@@ -97,7 +99,7 @@ class Order extends Component {
     const id = e.currentTarget.dataset.id;
 
     // Get index of the item in the cart
-    const idx = newState.cart.findIndex((item) => item.id == id);
+    const idx = newState.cart.findIndex((item) => item.id === id);
     // Remove item from cart
     newState.cart.splice(idx, 1);
 
@@ -109,7 +111,7 @@ class Order extends Component {
 
     const id = e.currentTarget.dataset.id;
     // Get index of the item in the cart
-    const idx = newState.cart.findIndex((item) => item.id == id);
+    const idx = newState.cart.findIndex((item) => item.id === id);
     const item = newState.cart[idx];
     newState.category = item.CategoryId;
     newState.product = [item];
@@ -142,15 +144,18 @@ class Order extends Component {
     const qty = e.target.value.replace(/\./gi, "");
     newState.qty = Math.abs(qty);
     this.updateState(newState);
-  };  
+  };
   getCategoryProds = (newState) => {
     newState.breadcrumb.categoryName = newState.breadcrumb.categories.find(
-      (category) => category.id === newState.category).category;
+      (category) => category.id === newState.category
+    ).category;
 
     // Get products in selected category
     const prods = this.state.allProducts;
-    newState.breadcrumb.products = prods.filter((prod) => prod.CategoryId === newState.category);
-    
+    newState.breadcrumb.products = prods.filter(
+      (prod) => prod.CategoryId === newState.category
+    );
+
     return newState.breadcrumb;
   };
   totalItems = (items, taxable) => {
@@ -173,7 +178,7 @@ class Order extends Component {
     };
     newState.invoice = invoice;
     this.updateState(newState);
-  };  
+  };
   updateState = (newState) => {
     console.log(newState);
     this.setState(newState);

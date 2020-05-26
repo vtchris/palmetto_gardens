@@ -6,6 +6,9 @@ export default {
     },
     getProductsActive: function () {
         return axios.get('/api/products/active')
+    },
+    getSettings: function(){
+        return axios.get('/api/settings')
     }
 }
 

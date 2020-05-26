@@ -12,7 +12,10 @@ function ProductSummary({ id, name, img, price, desc, unit, onClick }) {
           </div>
           <div className="row mb-1">
             <div className="col col-4">
-              <img src={img} className={img ? "img-fluid visible" : "hidden"} />
+              {
+                img ?  <img src={img} className="img-fluid visible" alt={name}  />
+                : ''
+              }               
             </div>
             <div className="col col-8">
               {`$${price.toFixed(2)} per ${unit}`}
