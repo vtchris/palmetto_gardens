@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import API from "../utils/API";
 import Category from "../components/Category";
-import Product from "../components/Product";
+import Cart from "../components/Cart";
 import ProductSummary from "../components/ProductSummary";
 
 class Order extends Component {
@@ -15,6 +15,7 @@ class Order extends Component {
     tax: 0,
     cart: [],
     invoice: {},
+    isCheckingOut: false,
   };
   componentDidMount() {
     let newState = this.state;
@@ -84,11 +85,17 @@ class Order extends Component {
   handleCategoryClick = (e) => {
     const newState = this.state;
     // Get selected category id
-    const cat = +e.target.dataset.id;
+    const cat = +e.currentTarget.dataset.id;
     newState.category = cat;
     newState.breadcrumb = this.getCategoryProds(newState);
     newState.products = newState.breadcrumb.products;
 
+    this.updateState(newState);
+  };
+  handleCheckoutClick = (e) => {
+    const newState = this.state;
+    
+    newState.checkout = true;
     this.updateState(newState);
   };
   handleDelete = (e) => {
@@ -183,53 +190,62 @@ class Order extends Component {
     console.log(newState);
     this.setState(newState);
   };
-  render() {
+  render() {    
     return (
       <>
         <div className="container">
           <div className="row">
-            <div className="col col-12 text-left">
+            <div className="col col-lg-8 col-12 text-left">
               <h4 className="m-3">
                 {this.state.category ? (
                   <>
-                    <a
-                      href="#"
+                    <button
                       data-id="cats"
+                      className="btn btn-link btn-lg"
                       onClick={this.handleBreadcrumbClick}
                     >
                       Categories
-                    </a>{" "}
+                    </button>{" "}
                     >{" "}
-                    <a
-                      href="#"
+                    <button
                       data-id="prods"
+                      className="btn btn-link btn-lg"
                       onClick={this.handleBreadcrumbClick}
                     >
                       {this.state.breadcrumb.categoryName}
-                    </a>
+                    </button>
                   </>
                 ) : (
                   `Select a Category`
                 )}
               </h4>
             </div>
+            <div className="col col-lg-4 col-12 text-right pr-0">
+              {this.state.cart.length > 0 && (
+                <button
+                  className="btn btn-lg btn-warning mt-3 mb-3"
+                  onClick={this.handleCheckoutClick}
+                >
+                  <span className="fas fa-cash-register mr-3"></span>Checkout
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="row text-center">
-            {this.state.category
-              ? ""
-              : this.state.breadcrumb.categories.map((cat) => (
-                  <Category
-                    key={cat.id}
-                    category={cat.category}
-                    id={cat.id}
-                    img={cat.img}
-                    onClick={this.handleCategoryClick}
-                  ></Category>
-                ))}
+            {this.state.category === 0 &&
+              this.state.breadcrumb.categories.map((cat) => (
+                <Category
+                  key={cat.id}
+                  category={cat.category}
+                  id={cat.id}
+                  img={cat.img}
+                  onClick={this.handleCategoryClick}
+                ></Category>
+              ))}
           </div>
           <div className="row">
-            {this.state.products.length > 0
+            {this.state.products.length > 0 
               ? this.state.products.map((prod) => (
                   <ProductSummary
                     key={prod.id}
@@ -243,7 +259,7 @@ class Order extends Component {
                   />
                 ))
               : this.state.product.map((prod) => (
-                  <Product
+                  <Cart
                     key={prod.id}
                     id={prod.id}
                     name={prod.itm_name}
@@ -258,8 +274,10 @@ class Order extends Component {
                     lineDelete={this.handleDelete}
                     lineClick={this.handleLineItemClick}
                     invoice={this.state.invoice}
-                  ></Product>
-                ))}
+                    isCheckingOut={this.state.checkout}
+                  ></Cart>
+                ))      
+              }
           </div>
         </div>
       </>
