@@ -2,7 +2,7 @@ import React from "react";
 import LineItem from "../LineItem";
 import InvoiceFooter from "../InvoiceFooter";
 
-function Product(props) {
+function Cart(props) {
   return (
     <div className="container no-gutters">
       <div className="row">
@@ -64,4 +64,4 @@ function Product(props) {
   );
 }
 
-export default Product;
+export default Cart;
