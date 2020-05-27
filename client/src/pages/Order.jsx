@@ -70,6 +70,7 @@ class Order extends Component {
   };
   handleBreadcrumbClick = (e) => {
     let newState = this.state;
+    newState.isCheckingOut = false;
 
     // If cat link is click, display all categories, otherwise display category products
     if (e.currentTarget.dataset.id === "cats") {
@@ -94,8 +95,8 @@ class Order extends Component {
   };
   handleCheckoutClick = (e) => {
     const newState = this.state;
-    
-    newState.checkout = true;
+
+    newState.isCheckingOut = true;
     this.updateState(newState);
   };
   handleDelete = (e) => {
@@ -116,7 +117,7 @@ class Order extends Component {
   handleLineItemClick = (e) => {
     const newState = this.state;
 
-    const id = e.currentTarget.dataset.id;
+    const id = +e.currentTarget.dataset.id;
     // Get index of the item in the cart
     const idx = newState.cart.findIndex((item) => item.id === id);
     const item = newState.cart[idx];
@@ -190,7 +191,7 @@ class Order extends Component {
     console.log(newState);
     this.setState(newState);
   };
-  render() {    
+  render() {
     return (
       <>
         <div className="container">
@@ -221,7 +222,7 @@ class Order extends Component {
               </h4>
             </div>
             <div className="col col-lg-4 col-12 text-right pr-0">
-              {this.state.cart.length > 0 && (
+              {this.state.cart.length > 0 && !this.state.isCheckingOut && (
                 <button
                   className="btn btn-lg btn-warning mt-3 mb-3"
                   onClick={this.handleCheckoutClick}
@@ -234,6 +235,7 @@ class Order extends Component {
 
           <div className="row text-center">
             {this.state.category === 0 &&
+              !this.state.isCheckingOut &&
               this.state.breadcrumb.categories.map((cat) => (
                 <Category
                   key={cat.id}
@@ -244,40 +246,34 @@ class Order extends Component {
                 ></Category>
               ))}
           </div>
-          <div className="row">
-            {this.state.products.length > 0 
-              ? this.state.products.map((prod) => (
-                  <ProductSummary
-                    key={prod.id}
-                    id={prod.id}
-                    name={prod.itm_name}
-                    img={prod.itm_img}
-                    price={prod.itm_prc}
-                    desc={prod.itm_description}
-                    unit={prod.itm_unit_of_measure}
-                    onClick={this.handleProductClick}
-                  />
-                ))
-              : this.state.product.map((prod) => (
-                  <Cart
-                    key={prod.id}
-                    id={prod.id}
-                    name={prod.itm_name}
-                    img={prod.itm_img}
-                    qty={this.state.qty}
-                    price={prod.itm_prc}
-                    desc={prod.itm_description}
-                    unit={prod.itm_unit_of_measure}
-                    onChange={this.handleQtyChange}
-                    onClick={this.handleAddToCart}
-                    cart={this.state.cart}
-                    lineDelete={this.handleDelete}
-                    lineClick={this.handleLineItemClick}
-                    invoice={this.state.invoice}
-                    isCheckingOut={this.state.checkout}
-                  ></Cart>
-                ))      
-              }
+          <div className="row">           
+            {this.state.products.length > 0 && !this.state.isCheckingOut ? (
+              this.state.products.map((prod) => (
+                <ProductSummary
+                  key={prod.id}
+                  id={prod.id}
+                  name={prod.itm_name}
+                  img={prod.itm_img}
+                  price={prod.itm_prc}
+                  desc={prod.itm_description}
+                  unit={prod.itm_unit_of_measure}
+                  onClick={this.handleProductClick}
+                />
+              ))
+            ) : this.state.product.length > 0 ? (
+              <Cart
+                prod={this.state.product[0]}
+                qty={this.state.qty}
+                onChange={this.handleQtyChange}
+                onClick={this.handleAddToCart}
+                cart={this.state.cart}
+                lineDelete={this.handleDelete}
+                lineClick={this.handleLineItemClick}
+                invoice={this.state.invoice}
+                isCheckingOut={this.state.isCheckingOut}
+              ></Cart>
+
+            ) : 'no product'}
           </div>
         </div>
       </>
