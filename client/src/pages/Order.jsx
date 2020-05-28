@@ -16,6 +16,7 @@ class Order extends Component {
     cart: [],
     invoice: {},
     isCheckingOut: false,
+    isSubmitted: false,
     user: {
       firstName: "",
       lastName: "",
@@ -92,6 +93,7 @@ class Order extends Component {
   handleBreadcrumbClick = (e) => {
     let newState = this.state;
     newState.isCheckingOut = false;
+    newState.isSubmitted = false;
 
     // If cat link is click, display all categories, otherwise display category products
     if (e.currentTarget.dataset.id === "cats") {
@@ -176,6 +178,16 @@ class Order extends Component {
   handleSaveOrder = (e) => {
     e.preventDefault();
     const newState = this.state;
+    if (
+      Object.keys(newState.user.errors).filter(
+        (key) => newState.user.errors[key].length > 0
+      ).length > 0
+    ) {
+      return;
+    }
+
+    newState.isCheckingOut = false;
+    newState.isSubmitted = true;
     newState.cart = [];
 
     this.updateState(newState);
@@ -184,7 +196,7 @@ class Order extends Component {
     const newState = this.state;
     const user = newState.user;
     const { name, value } = e.target;
-    
+
     user[name] = value.toUpperCase();
 
     switch (name) {
@@ -192,6 +204,10 @@ class Order extends Component {
       case "lastName":
         user.errors[name] =
           value.length < 2 ? "Name must be at least 2 characters." : "";
+        break;
+      case "address1":
+        user.errors[name] =
+          value.length < 5 ? "Address 1 must be at least 5 characters." : "";
         break;
       case "city":
         user.errors[name] =
@@ -201,6 +217,29 @@ class Order extends Component {
         user.errors[name] =
           value.length !== 2 ? "State must be 2 characters." : "";
         break;
+      case "zip":
+        const validZipRegex = RegExp(/^\d{5}(?:[-\s]\d{4})?$/);
+        user.errors[name] = !validZipRegex.test(value)
+          ? "Invalid zip code."
+          : "";
+        break;
+      case "email":
+        user[name] = value.toLowerCase();
+        const validEmailRegex = RegExp(
+          /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+        );
+        user.errors[name] = !validEmailRegex.test(value)
+          ? "Invalid email address."
+          : "";
+        break;
+      case "phone":
+        const validPhoneRegex = RegExp(
+          /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+        );
+        user.errors[name] = !validPhoneRegex.test(value)
+          ? "Invalid phone number."
+          : "";
+      default:
     }
 
     newState.user = user;
@@ -326,6 +365,7 @@ class Order extends Component {
                 lineClick={this.handleLineItemClick}
                 invoice={this.state.invoice}
                 isCheckingOut={this.state.isCheckingOut}
+                isSubmitted={this.state.isSubmitted}
                 onUserChange={this.handleUserUpdate}
                 onSaveOrder={this.handleSaveOrder}
               ></Cart>
