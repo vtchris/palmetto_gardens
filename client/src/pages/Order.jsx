@@ -16,6 +16,30 @@ class Order extends Component {
     cart: [],
     invoice: {},
     isCheckingOut: false,
+    user: {
+      firstName: "",
+      lastName: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
+      phone: "",
+      email: "",
+      notes: "",
+      errors: {
+        firstName: "",
+        lastName: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        phone: "",
+        email: "",
+        notes: "",
+      },
+    },
   };
   componentDidMount() {
     let newState = this.state;
@@ -63,9 +87,6 @@ class Order extends Component {
       item.qty = +this.state.qty;
       newState.cart.push(item);
     }
-
-    console.log(item);
-
     this.updateInvoice(newState);
   };
   handleBreadcrumbClick = (e) => {
@@ -80,7 +101,6 @@ class Order extends Component {
     } else {
       newState.products = newState.breadcrumb.products;
     }
-
     this.updateState(newState);
   };
   handleCategoryClick = (e) => {
@@ -153,6 +173,39 @@ class Order extends Component {
     newState.qty = Math.abs(qty);
     this.updateState(newState);
   };
+  handleSaveOrder = (e) => {
+    e.preventDefault();
+    const newState = this.state;
+    newState.cart = [];
+
+    this.updateState(newState);
+  };
+  handleUserUpdate = (e) => {
+    const newState = this.state;
+    const user = newState.user;
+    const { name, value } = e.target;
+    
+    user[name] = value.toUpperCase();
+
+    switch (name) {
+      case "firstName":
+      case "lastName":
+        user.errors[name] =
+          value.length < 2 ? "Name must be at least 2 characters." : "";
+        break;
+      case "city":
+        user.errors[name] =
+          value.length < 3 ? "City must be at least 3 characters." : "";
+        break;
+      case "state":
+        user.errors[name] =
+          value.length !== 2 ? "State must be 2 characters." : "";
+        break;
+    }
+
+    newState.user = user;
+    this.updateState(newState);
+  };
   getCategoryProds = (newState) => {
     newState.breadcrumb.categoryName = newState.breadcrumb.categories.find(
       (category) => category.id === newState.category
@@ -198,15 +251,16 @@ class Order extends Component {
           <div className="row">
             <div className="col col-lg-8 col-12 text-left">
               <h4 className="m-3">
+                <button
+                  data-id="cats"
+                  className="btn btn-link btn-lg"
+                  onClick={this.handleBreadcrumbClick}
+                >
+                  Categories
+                </button>
                 {this.state.category ? (
                   <>
-                    <button
-                      data-id="cats"
-                      className="btn btn-link btn-lg"
-                      onClick={this.handleBreadcrumbClick}
-                    >
-                      Categories
-                    </button>{" "}
+                    {" "}
                     >{" "}
                     <button
                       data-id="prods"
@@ -217,7 +271,7 @@ class Order extends Component {
                     </button>
                   </>
                 ) : (
-                  `Select a Category`
+                  ""
                 )}
               </h4>
             </div>
@@ -246,7 +300,7 @@ class Order extends Component {
                 ></Category>
               ))}
           </div>
-          <div className="row">           
+          <div className="row">
             {this.state.products.length > 0 && !this.state.isCheckingOut ? (
               this.state.products.map((prod) => (
                 <ProductSummary
@@ -260,9 +314,10 @@ class Order extends Component {
                   onClick={this.handleProductClick}
                 />
               ))
-            ) : this.state.product.length > 0 ? (
+            ) : this.state.product.length > 0 || this.state.isCheckingOut ? (
               <Cart
                 prod={this.state.product[0]}
+                user={this.state.user}
                 qty={this.state.qty}
                 onChange={this.handleQtyChange}
                 onClick={this.handleAddToCart}
@@ -271,9 +326,12 @@ class Order extends Component {
                 lineClick={this.handleLineItemClick}
                 invoice={this.state.invoice}
                 isCheckingOut={this.state.isCheckingOut}
+                onUserChange={this.handleUserUpdate}
+                onSaveOrder={this.handleSaveOrder}
               ></Cart>
-
-            ) : 'no product'}
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </>

@@ -6,18 +6,21 @@ import AddressForm from "../AddressForm";
 
 function Cart(props) {
   let prod = props.prod;
-  console.log(prod);
   return (
     <div className="container no-gutters">
       <div className="row">
         <div className="col col-lg-7 col-12">
           {props.isCheckingOut ? (
-            <AddressForm></AddressForm>
+            <AddressForm
+              user={props.user}
+              onUserChange={props.onUserChange}
+              onSaveOrder={props.onSaveOrder}
+            ></AddressForm>
           ) : (
             <ProductForm
               desc={prod.itm_description}
               id={prod.id}
-              img={prod.img}
+              img={prod.itm_img}
               name={prod.itm_name}
               price={prod.itm_prc}
               qty={props.qty}
