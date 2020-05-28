@@ -16,7 +16,7 @@ function Cart(props) {
               onUserChange={props.onUserChange}
               onSaveOrder={props.onSaveOrder}
             ></AddressForm>
-          ) : (
+          ) : !props.isSubmitted ? (
             <ProductForm
               desc={prod.itm_description}
               id={prod.id}
@@ -29,6 +29,11 @@ function Cart(props) {
               onChange={props.onChange}
               onClick={props.onClick}
             ></ProductForm>
+          ) : (
+            <>
+              <h2>Order Submitted.</h2>
+              <h3>Thank you for your business!</h3>
+            </>
           )}
         </div>
         <div className="col col-lg-5 col-12 border border-secondary rounded card cart">
