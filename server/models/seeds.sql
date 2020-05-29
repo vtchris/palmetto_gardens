@@ -10,6 +10,14 @@ VALUES (
         'vtchris.2357@gmail.com',
         '(704) 555-1111',
         .06 );
+
+INSERT INTO articles (title, content, category, img )
+VALUES('Company History',"Since 1939 Palmetto Farms has been known for producing quality farm products.  In the 1940's, 50's, and 60's Press Palmetto, our grandfather, raised cotton, tobacco and watermelons.  During the 70's, 80's, and 90's, Mack Palmetto, along with his wife and four sons continued raising watermelons and assorted produce.  Today Palmetto Farms is led by Jason and Ryan Palmetto who continue the farming tradition as a supplier of top quality pineneedles and produce.",1,''),
+('About','Welcome to Palmetto Farms the leader in top quality pine needles and produce.  We take pride in quickly delivering only the best quality pine straw available.  Our services include delivery and professional spreading.',1,''),
+('Pine Straw Delivery','Our services include delivering only the best quality longleaf pine needles year round. No matter the size we deliver any quantity from 15 bales to thousands.
+We also completely clean driveways and curb areas after delivery and/or spreading. This is just another way we show our commitment to quality service.',2,''),
+('Palmetto Farms Signature Spreading','Professional spreading is also available year round. This consists of hand spreading, cleaning all hard surfaces of pine straw, blow rolling of all edges, tucking and placing pineneedles under plant material, removing pine straw from plant foliage and a final clean up of the site.',2,''),
+('Pick Your Own','Pick your own blackberries, blueberries, grapes (Muscadine and Scuppernong), and strawberries',3,'');
 		
 INSERT INTO categories (category, img)
 VALUES 	('Landscaping Materials','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT2bUzkOMLfQ64nQ5ExyxKZMKQ4SIbwVVPMLxk2HpIxJw-FXoAa&usqp=CAU'), 
