@@ -239,6 +239,7 @@ class Order extends Component {
         user.errors[name] = !validPhoneRegex.test(value)
           ? "Invalid phone number."
           : "";
+        break;
       default:
     }
 
