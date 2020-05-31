@@ -8,9 +8,10 @@ function Article(props) {
           <h1 className="card-title">{props.title.toUpperCase()}</h1>
         </header>
         <main className="card-body">
-          {props.content.map((p) => (
-            <p>{p}</p>
-          ))}
+          {props.content.map(sentence => 
+            <p className="text-left">{`${sentence}. `}</p>
+          )}
+          
         </main>
       </article>
     </div>
