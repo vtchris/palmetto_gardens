@@ -1,7 +1,11 @@
 const router = require("express").Router();
-const productsController = require("../controllers/productController");
+const articlesController = require("../controllers/articlesController");
 const categoryController = require("../controllers/categoryController");
+const productsController = require("../controllers/productController");
 const settingController = require("../controllers/settingController");
+
+router.route("/articles")
+    .get(articlesController.findAll)
 
 router.route("/products/active")
     .get(productsController.findActive)

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import API from "../utils/API";
 import Article from "../components/Article";
 
 class Home extends Component {
@@ -7,19 +8,25 @@ class Home extends Component {
   };
   componentDidMount() {
     const newState = this.state;
-    newState.articles.push({
-      title: "test",
-      content: ["Paragraph1", "Paragraph2. Second Sentence."],
-    });
-    newState.articles.push({
-      title: "test2",
-      content: [
-        "Paragraph1. Sentence 2",
-        "Paragraph2. Second Sentence. Sentence 3.",
-      ],
-    });
 
-    this.setState(newState);
+    API.getArticles()
+      .then((res) => {
+        newState.articles = res.data.filter(
+          ({ active, category }) => active && [1].includes(category)
+        );
+        newState.articles.forEach(article => {
+          article.content = article.content
+                                    .split('.')
+                                    .map(sentence =>  sentence.trim())
+                                    .filter(sentence => sentence.length > 0);
+        })
+       
+        console.log(newState);
+        this.setState(newState);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   render() {
     return (
@@ -29,6 +36,7 @@ class Home extends Component {
           <div className="row">
             {this.state.articles.map((article) => (
               <Article
+                key={article.id}
                 title={article.title}
                 content={article.content}
               ></Article>
