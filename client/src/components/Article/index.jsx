@@ -1,11 +1,12 @@
 import React from "react";
 
 function Article(props) {
+  const colorClass = ['secondary','primary','success','info'][props.category -1]
   return (
     <div className="col col-md-6 col-12">
       <article className="card m-3">
-        <header className="card-header bg-secondary text-light">
-          <h1 className="card-title">{props.title.toUpperCase()}</h1>
+        <header className={`card-header bg-${colorClass} text-light`}>
+          <h2 className="card-title">{props.title.toUpperCase()}</h2>
         </header>
         <main className="card-body">
           {props.content.map(sentence => 

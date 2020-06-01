@@ -38,6 +38,7 @@ class Home extends Component {
               <Article
                 key={article.id}
                 title={article.title}
+                category={article.category}
                 content={article.content}
               ></Article>
             ))}
