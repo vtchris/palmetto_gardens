@@ -12,6 +12,9 @@ export default {
     },
     getSettings: function(){
         return axios.get('/api/settings')
+    },
+    postEmail: function(emailOptions){
+        return axios.post('/api/email', emailOptions)
     }
 }
 
