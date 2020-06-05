@@ -5,9 +5,17 @@ import Notifications, { notify } from "../components/Notifications";
 class Contact extends Component {
   state = {
     to: "",
+    firstName: "",
+    lastName: "",
     from: "",
+    phone: "",
     subject: "",
     text: "",
+    errors: {
+      from: "",
+      phone: "",
+      text: "",
+    },
   };
   componentDidMount = () => {
     API.getSettings().then((res) => {
@@ -16,21 +24,61 @@ class Contact extends Component {
   };
   handleOnChange = (e) => {
     const newState = this.state;
+    const { name, value } = e.target;
 
-    newState[e.currentTarget.name] = e.currentTarget.value;
-
+    switch (name) {
+      case "from":
+        newState[name] = value.toLowerCase();
+        const validEmailRegex = RegExp(
+          /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+        );
+        newState.errors[name] = !validEmailRegex.test(value)
+          ? "Invalid email address."
+          : "";
+        break;
+      case "phone":
+        if (value) {
+          console.log(value);
+          const validPhoneRegex = RegExp(
+            /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+          );
+          newState.errors[name] = !validPhoneRegex.test(value)
+            ? "Invalid phone number."
+            : "";
+            newState[name] = value;
+        }
+        break;
+      case "text":
+        newState.errors[name] =
+          value.length < 10 ? "Message must be at least 10 characters." : "";
+      default:
+        newState[name] = value;
+    }
+    
     this.setState(newState);
   };
   handleSubmit = (e) => {
     e.preventDefault();
     const newState = this.state;
 
+    const errors = Object.values(newState.errors).filter(err => err.length > 0)
+
+    if(errors.length){
+      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )
+      console.log(msg)
+      notify(msg, "fas fa-exclamation-circle")
+
+    }
+    
+
+    return;
+
     API.postEmail(newState).then((res) => {
       newState.from = "";
       newState.subject = "";
       newState.text = "";
       this.setState(newState);
-      notify("Email Sent","far fa-envelope");
+      notify("Email Sent", "far fa-envelope");
     });
   };
   render() {
@@ -43,11 +91,35 @@ class Contact extends Component {
             <div className="col-md-6 col-12 offset-md-3">
               <form>
                 <input
+                  name="firstName"
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="First Name"
+                  value={this.state.firstName}
+                  onChange={this.handleOnChange}
+                ></input>
+                <input
+                  name="lastName"
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Last Name"
+                  value={this.state.lastName}
+                  onChange={this.handleOnChange}
+                ></input>
+                <input
                   name="from"
                   type="text"
                   className="form-control mb-3"
                   placeholder="Email Address"
                   value={this.state.from}
+                  onChange={this.handleOnChange}
+                ></input>
+                <input
+                  name="phone"
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Phone Number (optional)"
+                  value={this.state.phone}
                   onChange={this.handleOnChange}
                 ></input>
                 <input

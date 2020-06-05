@@ -226,7 +226,7 @@ class Order extends Component {
       case "email":
         user[name] = value.toLowerCase();
         const validEmailRegex = RegExp(
-          /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+          /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
         );
         user.errors[name] = !validEmailRegex.test(value)
           ? "Invalid email address."
