@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import API from "../utils/API";
-import Notifications from "../components/Notifications";
+import Notifications, { notify } from "../components/Notifications";
 
 class Contact extends Component {
   state = {
-    to: "vtchris@hotmail.com",
+    to: "",
     from: "",
     subject: "",
     text: "",
+  };
+  componentDidMount = () => {
+    API.getSettings().then((res) => {
+      this.setState({ to: res.data[0].email });
+    });
   };
   handleOnChange = (e) => {
     const newState = this.state;
@@ -20,21 +25,18 @@ class Contact extends Component {
     e.preventDefault();
     const newState = this.state;
 
-    API.postEmail(newState).then(res => {
-      console.log(res);
+    API.postEmail(newState).then((res) => {
       newState.from = "";
       newState.subject = "";
       newState.text = "";
       this.setState(newState);
-
-    })
-
-    
+      notify("Email Sent","far fa-envelope");
+    });
   };
   render() {
     return (
       <>
-        <Notifications>Email Sent</Notifications>
+        <Notifications></Notifications>
         <h1>Contact</h1>
         <main className="container mt-4">
           <div className="row">
