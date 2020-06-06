@@ -16,7 +16,7 @@ const Notification = styled.div`
 const emitter = new events.EventEmitter();
 
 export const notify = (msg, icon) => {
-   
+
     emitter.emit('alert', msg, icon);
 }
 class Notifications extends Component {
@@ -28,14 +28,12 @@ class Notifications extends Component {
             msg: '',
             top: -100
         }
-
-        emitter.on('alert', (msg, icon ) => {
+        emitter.on('alert', (msg, icon) => {
             const newState = this.state;
-            console.log(msg)
-            console.log(icon)
+            
             newState.msg = msg;
             newState.icon = icon;
-            console.log(newState)
+            
             this.setState(newState);
             this.showNotification()
         });
@@ -43,15 +41,13 @@ class Notifications extends Component {
     showNotification = () => {
         this.setState({ top: 125 }, () => {
             setTimeout(() => this.setState({ top: -100 }), 4000)
-        });
+        });        
     }
     render() {
         return (
-            <Notification style={{ top: this.state.top }}><span className={`${this.state.icon} mr-2`}></span>{this.state.msg}</Notification>
+            <Notification style={{ top: this.state.top }}><ul className="list-unstyled text-left mb-0">{this.state.msg.split("\n").map(m => <li><span className={`${this.state.icon} mr-2`}></span>{m}</li>)}</ul></Notification>
         );
     }
 }
-
-
 
 export default Notifications;
