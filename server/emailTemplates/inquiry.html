@@ -1,10 +1,36 @@
-<div class="email-background">
-    <div class="pre-header">
-        Does this work?
+<body class="email-background" style="background-color: #58c0a2;">
+    <div class="preheader" style="display: none;">
+        From: {FROM} |
     </div>
-    <div class="email-container" style="background-color: salmon;">
-        <h1>What do you think?</h1>
-        <p>{FROM}</p>
-        <p>{MESSAGE}</p>
+    <div class="email-container">
+        <table>
+            <tr>
+                <td>
+                    <h1>General Question</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style: none;">
+                        <li>{FROM}</li>
+                        <li>{NAME}</li>
+                        <li>{PHONE}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="font-size:20px;margin-bottom:15px;">{MESSAGE}</p>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+            <tr>
+                <td>
+                    <p style="font-size:14px;">Please do not reply to this email, this email address is not monitored.</p>
+                </td>
+            </tr>
+        </table>
     </div>
-</div>
+</body>

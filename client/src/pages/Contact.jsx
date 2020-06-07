@@ -14,7 +14,7 @@ class Contact extends Component {
     errors: {
       from: "",
       phone: "",
-      text: "",
+      text: ""
     },
   };
   componentDidMount = () => {
@@ -64,20 +64,27 @@ class Contact extends Component {
     const errors = Object.values(newState.errors).filter(err => err.length > 0)
 
     if(!errors.length){
-      if(!newState.from){errors.push("Email Address is required.")}
-      if(!newState.text){errors.push("Message is required.")}
+      
+      if(!newState.from.length){ errors.push("Email Address is required.")}
+      if(!newState.text.length){ errors.push("Message is required.")}
     }
-
+   
     if(errors.length){
       let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )
       console.log(msg)
       notify(msg, "fas fa-exclamation-circle")
+      return
     }    
 
-    return;
-
+    if(!newState.subject){
+      newState.subject = "General Question"
+    }
+   
     API.postEmail(newState).then((res) => {
       newState.from = "";
+      newState.firstName = "";
+      newState.lastName = "";
+      newState.phone = "";
       newState.subject = "";
       newState.text = "";
       this.setState(newState);
