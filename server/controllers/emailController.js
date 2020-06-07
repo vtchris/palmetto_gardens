@@ -13,7 +13,9 @@ sendHtml = (mailOptions) => {
     fs.readFile(__dirname + '/../emailTemplates/inquiry.html', 'utf8', function(err,HTML){
         if(err) console.log(err);
         
-        HTML = HTML.replace(/{FROM}/i,mailOptions.from)
+        HTML = HTML.replace(/{FROM}/ig,mailOptions.from)
+        HTML = HTML.replace(/{NAME}/i,`${mailOptions.firstName} ${mailOptions.lastName}` )
+        HTML = HTML.replace(/{PHONE}/i,mailOptions.phone)
         HTML = HTML.replace(/{MESSAGE}/i,mailOptions.text)
         mailOptions.html = HTML;
      
