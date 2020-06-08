@@ -20,10 +20,10 @@ We also completely clean driveways and curb areas after delivery and/or spreadin
 ('Pick Your Own','Pick your own blackberries, blueberries, grapes (Muscadine and Scuppernong), and strawberries',3,"assets/images/other/pickblueberries.jpg");
 		
 INSERT INTO categories (category, img)
-VALUES 	('Landscaping Materials','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT2bUzkOMLfQ64nQ5ExyxKZMKQ4SIbwVVPMLxk2HpIxJw-FXoAa&usqp=CAU'), 
-		('Firewood','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSSaY2UkGk8onq_COeeXY1vHjuC8md5OpLSOJwkmPCkEoj4lodU&usqp=CAU'), 
-        ('Produce','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQzmuKqP7fSuyiLj_eaG2WuciOAZfrJc0e2hbLPFF8qGyvNyn4T&usqp=CAU'), 
-       	('Gift Baskets','https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRHWgL-CAnvBIYRpIx0WSug3DVfrmogkKgz8bUHGvwcOXcUugALcQpH9S3uSJdmpOmqAr9GQyo&usqp=CAc'); 
+VALUES 	('Landscaping Materials','assets/images/products/landscaping.jpg'), 
+		('Firewood','assets/images/products/firewood.jpg'), 
+        ('Produce','assets/images/products/produce.jpg'), 
+       	('Gift Baskets','assets/images/products/giftbasket.jpg'); 
 
 INSERT INTO products (itm_name, itm_nbr,itm_img, itm_cost, itm_prc, itm_unit_of_measure, itm_description, taxable,  active,CategoryId)
 VALUES 	('Pine needles', 100, 'assets/images/products/pinestraw.jpg', 3, 4.5, 'bale','We use only the best premium Carolina Native Longleaf pine straw. For best results spread new pine straw once or twice a year.',true,true,1), 

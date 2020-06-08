@@ -8,7 +8,7 @@ function Category({ category, id, img, onClick }) {
       <h5 className="card-title">{category}</h5>
       </div>
       <div className="card-body">
-        <img className="img-fluid" src={img} alt={`${category} icon`}/>
+        <img className="img-fluid" width="200" src={img} alt={`${category} icon`}/>
       </div>
     </div>
   );
