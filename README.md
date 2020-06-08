@@ -15,7 +15,7 @@
 
 ## Author
 
-👤 **:Chris Rosss**
+👤 **Chris Ross**
 
 * Website: https://vtchris.github.io/portfolio/
 * Twitter: [@vtchris_2357](https://twitter.com/vtchris_2357)
