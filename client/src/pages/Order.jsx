@@ -59,7 +59,8 @@ class Order extends Component {
         newState.breadcrumb.categories = cats.data.filter(
           (cat) => cat.active && prodCats.includes(cat.id)
         );
-
+        console.log('Here comes the fing shit show')
+          console.log(cats)
         this.updateState(newState);
       })
       .catch((err) => {
