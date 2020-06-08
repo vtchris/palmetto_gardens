@@ -9,8 +9,9 @@ function Article(props) {
           <h2 className="card-title">{props.title.toUpperCase()}</h2>
         </header>
         <main className="card-body">
+          {props.img ? <img src={props.img} width="150" className="img-fluid img-thumbnail float-left mr-2" alt={props.title} ></img> : ""}
           {props.content.map(sentence => 
-            <p className="text-left">{`${sentence}. `}</p>
+            <p className="text-left" >{`${sentence}. `}</p>
           )}
           
         </main>
