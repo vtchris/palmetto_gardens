@@ -3,7 +3,7 @@ USE palmetto;
 INSERT INTO settings (companyName, address1, city, state, zipCode, email, phone1, taxRate)
 VALUES (
 		'Palmetto Farms',
-		'3062 HWY 601 N',
+		'100 HWY 601 N',
         'Pageland',
         'SC',
         '29728',

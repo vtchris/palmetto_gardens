@@ -11,6 +11,7 @@ class Contact extends Component {
     phone: "",
     subject: "",
     text: "",
+    company: {},
     errors: {
       from: "",
       phone: "",
@@ -19,7 +20,7 @@ class Contact extends Component {
   };
   componentDidMount = () => {
     API.getSettings().then((res) => {
-      this.setState({ to: res.data[0].email });
+      this.setState({ to: res.data[0].email, company: res.data[0] });
     });
   };
   handleOnChange = (e) => {
@@ -37,16 +38,15 @@ class Contact extends Component {
           : "";
         break;
       case "phone":
-        if (value) {
-          console.log(value);
+        
           const validPhoneRegex = RegExp(
             /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
           );
-          newState.errors[name] = !validPhoneRegex.test(value)
+          newState.errors[name] = !validPhoneRegex.test(value) && (value)
             ? "Invalid phone number."
             : "";
             newState[name] = value;
-        }
+        
         break;
       case "text":
         newState.errors[name] =
