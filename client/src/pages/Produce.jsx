@@ -39,6 +39,7 @@ class Produce extends Component {
               <Article
                 key={article.id}
                 title={article.title}
+                img={article.img}
                 category={article.category}
                 content={article.content}
               ></Article>
