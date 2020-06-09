@@ -24,7 +24,7 @@ function Cart(props) {
               name={prod.itm_name}
               price={prod.itm_prc}
               qty={props.qty}
-              unit={prod.unit}
+              unit={prod.itm_unit_of_measure}
               lineClick={props.lineClick}
               onChange={props.onChange}
               onClick={props.onClick}
