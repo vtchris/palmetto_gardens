@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import API from "../utils/API";
 import Category from "../components/Category";
 import Cart from "../components/Cart";
+import Notifications, { notify } from "../components/Notifications";
 import ProductSummary from "../components/ProductSummary";
 
 class Order extends Component {
@@ -29,15 +30,15 @@ class Order extends Component {
       email: "",
       notes: "",
       errors: {
-        firstName: "",
-        lastName: "",
-        address1: "",
+        firstName: "First Name is required.",
+        lastName: "Last Name is required.",
+        address1: "Address 1 is required.",
         address2: "",
-        city: "",
-        state: "",
-        zip: "",
-        phone: "",
-        email: "",
+        city: "City is required.",
+        state: "State is required.",
+        zip: "Zip code is required.",
+        phone: "Phone number is required.",
+        email: "Email is required.",
         notes: "",
       },
     },
@@ -59,8 +60,8 @@ class Order extends Component {
         newState.breadcrumb.categories = cats.data.filter(
           (cat) => cat.active && prodCats.includes(cat.id)
         );
-        console.log('Here comes the fing shit show')
-          console.log(cats)
+        console.log("Here comes the fing shit show");
+        console.log(cats);
         this.updateState(newState);
       })
       .catch((err) => {
@@ -179,13 +180,28 @@ class Order extends Component {
   handleSaveOrder = (e) => {
     e.preventDefault();
     const newState = this.state;
-    if (
-      Object.keys(newState.user.errors).filter(
-        (key) => newState.user.errors[key].length > 0
-      ).length > 0
-    ) {
-      return;
+    const errors = Object.values(newState.user.errors).filter(err => err.length > 0);
+    
+    // if (
+    //   Object.keys(newState.user.errors).filter(
+    //     (key) => newState.user.errors[key].length > 0
+    //   ).length > 0
+    // ) {
+    //   return;
+
+    // }
+    if(!errors.length){
+      
+      // if(!newState.from.length){ errors.push("Email Address is required.")}
+      // if(!newState.text.length){ errors.push("Message is required.")}
     }
+   
+    if(errors.length){
+      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )
+      console.log(msg)
+      notify(msg, "fas fa-exclamation-circle")
+      return
+    }    
 
     newState.isCheckingOut = false;
     newState.isSubmitted = true;
@@ -288,6 +304,7 @@ class Order extends Component {
   render() {
     return (
       <>
+        <Notifications></Notifications>
         <div className="container">
           <div className="row">
             <div className="col col-lg-8 col-12 text-left">

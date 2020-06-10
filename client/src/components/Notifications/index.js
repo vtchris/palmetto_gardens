@@ -8,8 +8,8 @@ const Notification = styled.div`
     padding: 16px;
     position: absolute;
     top: -100px;
-    right: 1em;
-    z-index: 999;
+    right: 5em;
+    z-index: 45;
     transition: top 0.5s ease;
 `;
 
@@ -40,7 +40,7 @@ class Notifications extends Component {
     }
     showNotification = () => {
         this.setState({ top: 125 }, () => {
-            setTimeout(() => this.setState({ top: -100 }), 4000)
+            setTimeout(() => this.setState({ top: -250 }), 4000)
         });        
     }
     render() {
