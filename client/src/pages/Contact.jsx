@@ -13,9 +13,9 @@ class Contact extends Component {
     text: "",
     company: {},
     errors: {
-      from: "",
+      from: "Email is required.",
       phone: "",
-      text: ""
+      text: "Message is required."
     },
   };
   componentDidMount = () => {
@@ -61,13 +61,7 @@ class Contact extends Component {
     e.preventDefault();
     const newState = this.state;
 
-    const errors = Object.values(newState.errors).filter(err => err.length > 0)
-
-    if(!errors.length){
-      
-      if(!newState.from.length){ errors.push("Email Address is required.")}
-      if(!newState.text.length){ errors.push("Message is required.")}
-    }
+    const errors = Object.values(newState.errors).filter(err => err.length > 0);
    
     if(errors.length){
       let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )

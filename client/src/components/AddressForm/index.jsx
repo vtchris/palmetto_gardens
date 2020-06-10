@@ -2,7 +2,7 @@ import React from "react";
 
 function AddressForm(props) {
   return (
-    <form className="pr-5 pl-5">
+    <form className="pr-5 pl-5">     
       <input
         type="text"
         name="firstName"

@@ -1,4 +1,10 @@
 .header-img{
     max-height:50px;
     width:100%;
+    position: relative;
+    z-index: 50;    
+}
+nav{
+    position: relative;
+    z-index: 50;
 }
