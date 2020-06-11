@@ -14,13 +14,13 @@ class Produce extends Component {
         newState.articles = res.data.filter(
           ({ active, category }) => active && [3].includes(category)
         );
-        newState.articles.forEach(article => {
+        newState.articles.forEach((article) => {
           article.content = article.content
-                                    .split('.')
-                                    .map(sentence =>  sentence.trim())
-                                    .filter(sentence => sentence.length > 0);
-        })
-       
+            .split(".")
+            .map((sentence) => sentence.trim())
+            .filter((sentence) => sentence.length > 0);
+        });
+
         console.log(newState);
         this.setState(newState);
       })
@@ -31,26 +31,22 @@ class Produce extends Component {
 
   render() {
     return (
-      <>
+      <main className="container">
         <h1>Produce</h1>
-        <main className="container">
-          <div className="row">
-            {this.state.articles.map((article) => (
-              <Article
-                key={article.id}
-                title={article.title}
-                img={article.img}
-                category={article.category}
-                content={article.content}
-              ></Article>
-            ))}
-          </div>
-        </main>
-      </>
+        <div className="row">
+          {this.state.articles.map((article) => (
+            <Article
+              key={article.id}
+              title={article.title}
+              img={article.img}
+              category={article.category}
+              content={article.content}
+            ></Article>
+          ))}
+        </div>
+      </main>
     );
-
   }
-  
 }
 
 export default Produce;
