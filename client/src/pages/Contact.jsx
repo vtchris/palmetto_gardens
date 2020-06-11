@@ -15,7 +15,7 @@ class Contact extends Component {
     errors: {
       from: "Email is required.",
       phone: "",
-      text: "Message is required."
+      text: "Message is required.",
     },
   };
   componentDidMount = () => {
@@ -38,15 +38,13 @@ class Contact extends Component {
           : "";
         break;
       case "phone":
-        
-          const validPhoneRegex = RegExp(
-            /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
-          );
-          newState.errors[name] = !validPhoneRegex.test(value) && (value)
-            ? "Invalid phone number."
-            : "";
-            newState[name] = value;
-        
+        const validPhoneRegex = RegExp(
+          /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+        );
+        newState.errors[name] =
+          !validPhoneRegex.test(value) && value ? "Invalid phone number." : "";
+        newState[name] = value;
+
         break;
       case "text":
         newState.errors[name] =
@@ -54,26 +52,28 @@ class Contact extends Component {
       default:
         newState[name] = value;
     }
-    
+
     this.setState(newState);
   };
   handleSubmit = (e) => {
     e.preventDefault();
     const newState = this.state;
 
-    const errors = Object.values(newState.errors).filter(err => err.length > 0);
-   
-    if(errors.length){
-      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )
-      console.log(msg)
-      notify(msg, "fas fa-exclamation-circle")
-      return
-    }    
+    const errors = Object.values(newState.errors).filter(
+      (err) => err.length > 0
+    );
 
-    if(!newState.subject){
-      newState.subject = "General Question"
+    if (errors.length) {
+      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`));
+      console.log(msg);
+      notify(msg, "fas fa-exclamation-circle");
+      return;
     }
-   
+
+    if (!newState.subject) {
+      newState.subject = "General Question";
+    }
+
     API.postEmail(newState).then((res) => {
       newState.from = "";
       newState.firstName = "";
@@ -89,8 +89,12 @@ class Contact extends Component {
     return (
       <>
         <Notifications></Notifications>
-        <h1>Contact</h1>
         <main className="container mt-4">
+          <header className="row">
+            <div className="col-12">
+              <h1>Contact</h1>
+            </div>
+          </header>
           <div className="row">
             <div className="col-md-6 col-12 offset-md-3">
               <form>
@@ -137,7 +141,7 @@ class Contact extends Component {
                 <textarea
                   name="text"
                   className="form-control mb-4"
-                  rows="6"
+                  rows="4"
                   placeholder="Message..."
                   value={this.state.text}
                   onChange={this.handleOnChange}

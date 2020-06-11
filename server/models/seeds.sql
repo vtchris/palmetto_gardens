@@ -7,7 +7,7 @@ VALUES (
         'Pageland',
         'SC',
         '29728',
-        'Palmetto Gardens <vtchris.2357@gmail.com>',
+        'vtchris.2357@gmail.com',
         '(704) 555-1111',
         .06 );
 
