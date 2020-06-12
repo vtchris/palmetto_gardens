@@ -9,63 +9,116 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASSWORD
     }
 });
-sendContact = (mailOptions) => {
-    fs.readFile(__dirname + '/../emailTemplates/inquiry.html', 'utf8', function(err,HTML){
-        if(err) console.log(err);
+sendContact = (mailData) => {
+    fs.readFile(__dirname + '/../emailTemplates/inquiry.html', 'utf8', function (err, HTML) {
+        if (err) console.log(err);
+
+        HTML = HTML.replace(/{FROM}/ig, mailData.mailOptions.from)
+        HTML = HTML.replace(/{NAME}/i, `${mailData.firstName} ${mailData.lastName}`)
+        HTML = HTML.replace(/{PHONE}/i, mailData.phone)
+        HTML = HTML.replace(/{MESSAGE}/i, mailData.mailOptions.text)
+        mailData.mailOptions.html = HTML;
         
-        HTML = HTML.replace(/{FROM}/ig,mailOptions.from)
-        HTML = HTML.replace(/{NAME}/i,`${mailOptions.firstName} ${mailOptions.lastName}` )
-        HTML = HTML.replace(/{PHONE}/i,mailOptions.phone)
-        HTML = HTML.replace(/{MESSAGE}/i,mailOptions.text)
-        mailOptions.html = HTML;
-     
-        sendEmail(mailOptions)
-        sendThankyou(mailOptions);
+        sendEmail(mailData.mailOptions)
+        sendThankyou(mailData);
     })
 
 }
-sendThankyou = (mailOptions) => {
-    // Flip the to and from email addresses for the thank you
-    const thankYouOptions = mailOptions;
-    thankYouOptions.from = mailOptions.to;
-    thankYouOptions.to = mailOptions.from;
-    if(thankYouOptions.subject = "General Question") {thankYouOptions.subject = "Thank you"}
-    mailOptions = thankYouOptions;
-    const company = mailOptions.company;
+sendOrder = (mailOptions) => {
+    fs.readFile(__dirname + '/../emailTemplates/order.html', 'utf8', function (err, HTML) {
+        if (err) console.log(err);
 
-    fs.readFile(__dirname + '/../emailTemplates/thankyou.html', 'utf8', function(err,HTML){
-        if(err) console.log(err);
-              
-        HTML = HTML.replace(/{COMPANY}/ig,company.companyName)
-        HTML = HTML.replace(/{ADDRESS1}/ig,company.address1)
-        HTML = HTML.replace(/{ADDRESS2}/ig,
-            company.address2
-            ?  `<tr><td style="text-align:center;">${company.address2}</td></tr>`
-            :  "")        
-        HTML = HTML.replace(/{CSZ}/i,`${company.city}, ${company.state} ${company.zipCode}` )
-        HTML = HTML.replace(/{PHONE}/i,company.phone1)
-        
+        const { cart, invoice, settings, user } = mailOptions;
+
+        HTML = HTML.replace(/{FROM}/ig, `<li>${user.email}</li>`)
+        HTML = HTML.replace(/{NAME}/i, `<li>${user.firstName} ${user.lastName}</li>`)
+        HTML = HTML.replace(/{PHONE}/i, `<li>${user.phone}</li>`)
+        HTML = HTML.replace(/{ADDRESS1}/i, `<li>${user.address1}</li>`)
+        HTML = HTML.replace(/{ADDRESS2}/i, 
+            user.address2
+            ? `<li>${user.address1}</li>`
+            : ''
+        )       
+        HTML = HTML.replace(/{CSZ}/i, `<li>${user.city}, ${user.state} ${user.zip}</li>`)
+        let orderTable = ""
+        cart.forEach(item => orderTable += `<tr><td style="text-align: left">${item.itm_name}</td><td style="text-align: right">$${item.itm_prc}</td><td style="text-align: right">${item.qty}</td><td style="text-align: right">$${item.itm_prc * item.qty}</td></tr>\n`)
+        HTML = HTML.replace(/{ORDER-LINEITEMS}/i, orderTable)
+        let totals = ""
+        if(invoice.tax){
+            totals = `<tr><td>Tax:</td><td colspan="3" style="text-align: right">$${invoice.tax}</td</tr>\n`
+        }
+        totals += `<tr><td>Total:</td><td colspan="3" style="text-align: right">$${invoice.total}</td</tr>`
+        HTML = HTML.replace(/{TOTAL}/i, totals);
+        HTML = updateSettingsInfo(HTML, settings);
         mailOptions.html = HTML;
-     
-        sendEmail(mailOptions)
+       
+        sendEmail(mailOptions);
+
+    })
+
+}
+sendThankyou = (mailData) => {
+    // Flip the to and from email addresses for the thank you
+    const { to, from } = mailData.mailOptions;
+    mailData.mailOptions.to = from;
+    mailData.mailOptions.from = to;
+    
+    if (mailData.mailOptions.subject = "General Question") { mailData.mailOptions.subject = "Thank you" }
+       
+    const settings = mailData.settings;
+
+    fs.readFile(__dirname + '/../emailTemplates/thankyou.html', 'utf8', function (err, HTML) {
+        if (err) console.log(err);
+
+        HTML = updateSettingsInfo(HTML, settings)
+
+        mailData.mailOptions.html = HTML;
+       
+        sendEmail(mailData.mailOptions);
     })
 
 }
 sendEmail = (mailOptions) => {
+    
     transporter.sendMail(mailOptions, function (err, data) {
-            
+
         if (err) {
             console.log(err)
-        } else {            
+        } else {
             console.log(`Email Sent`)
         }
     })
 }
-module.exports = {   
-    send: function (req,res) {
-        const mailOptions = req.body;
-        sendContact(mailOptions);      
-        res.status(200).json("Email sent");
+updateSettingsInfo = (HTML, settings) => {
+
+    HTML = HTML.replace(/{COMPANY_NAME}/ig, settings.companyName);
+    HTML = HTML.replace(/{COMPANY_ADDRESS1}/ig, settings.address1);
+    HTML = HTML.replace(/{COMPANY_ADDRESS2}/ig,
+        settings.address2
+            ? `<tr><td style="text-align:center;">${settings.address2}</td></tr>`
+            : "");
+    HTML = HTML.replace(/{COMPANY_CSZ}/i, `${settings.city}, ${settings.state} ${settings.zipCode}`);
+    HTML = HTML.replace(/{COMPANY_PHONE}/i, settings.phone1);
+
+    return HTML;
+
+}
+module.exports = {
+    send: function (req, res) {
+        const emailData = req.body;
         
+        switch (emailData.page) {
+            case "contact":
+                sendContact(emailData);
+                break;
+            case "order":
+                sendOrder(emailData);
+                break;
+            default:
+                res.status(404).json("Email type unknown");
+        }
+
+        res.status(200).json("Email sent");
+
     }
 };
