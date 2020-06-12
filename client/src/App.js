@@ -15,11 +15,11 @@ class App extends Component {
     settings: {}
   }
   componentDidMount = () => {
-    API.getSettings().then(results => {
+    API.getSettings().then(results => {     
       this.setState({ settings: results.data[0] });
     })
   }
-  render() {
+  render() {  
     return (
       <div className="App">
         <Nav />
@@ -28,7 +28,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/contact" component={Contact} />
-            <Route exact path="/order" component={Order} />
+            <Route exact path="/order" component={Order}/>            
             <Route exact path="/produce" component={Produce} />
             <Route exact path="/services" component={Services} />
           </Switch>

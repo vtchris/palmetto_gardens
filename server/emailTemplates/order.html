@@ -1,0 +1,79 @@
+<body class="email-background" style="background-color: #58c0a2;">
+    <div class="preheader" style="display: none;">
+        From: {FROM} |
+    </div>
+    <div class="email-container">
+        <table>
+            <tr>
+                <td>
+                    <h1>Thank you for your order!</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul style="list-style: none;">
+                        {NAME}
+                        {FROM}
+                        {PHONE}
+                        {ADDRESS1}
+                        {ADDRESS2}
+                        {CSZ}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="0" cellspacing="0"
+                        style="min-width:100%;border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid black;">
+                            <tr>
+                                <th scope="col"
+                                    style="font-family: Arial,sans-serif; font-size: 16px; line-height:20px;line-height:30px; text-align: left">
+                                    ITEM</th>
+                                <th scope="col"
+                                    style="font-family: Arial,sans-serif; font-size: 16px; line-height:20px;line-height:30px;text-align: right">
+                                    PRICE</th>
+                                <th scope="col"
+                                    style="font-family: Arial,sans-serif; font-size: 16px; line-height:20px;line-height:30px; text-align: right">
+                                    QTY</th>
+                                <th scope="col"
+                                    style="font-family: Arial,sans-serif; font-size: 16px; line-height:20px;line-height:30px; text-align: right">
+                                    EXT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {ORDER-LINEITEMS}
+                        </tbody>
+                        <tfoot style="border-top: 2px solid black;">
+                            {TOTAL}
+                        </tfoot>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+            <tr>
+                <td>
+                    <p style="font-size:14px;padding: 50px;">Please do not reply to this email, this email address is not monitored.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">
+                    <h3 style="margin:3px;">{COMPANY_NAME}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">{COMPANY_ADDRESS1}</td>
+            </tr>
+            {COMPANY_ADDRESS2}
+            <tr>
+                <td style="text-align:center;">{COMPANY_CSZ}</td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">{COMPANY_PHONE}</td>
+            </tr>
+        </table>
+    </div>
+</body>

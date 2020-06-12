@@ -4,14 +4,12 @@ import Notifications, { notify } from "../components/Notifications";
 
 class Contact extends Component {
   state = {
-    to: "",
+    page: "contact",
     firstName: "",
     lastName: "",
-    from: "",
     phone: "",
-    subject: "",
-    text: "",
-    company: {},
+    settings: {},
+    mailOptions: {},
     errors: {
       from: "Email is required.",
       phone: "",
@@ -20,7 +18,12 @@ class Contact extends Component {
   };
   componentDidMount = () => {
     API.getSettings().then((res) => {
-      this.setState({ to: res.data[0].email, company: res.data[0] });
+      this.setState({
+        mailOptions: {
+          to: res.data[0].email,
+        },
+        settings: res.data[0],
+      });
     });
   };
   handleOnChange = (e) => {
@@ -29,13 +32,14 @@ class Contact extends Component {
 
     switch (name) {
       case "from":
-        newState[name] = value.toLowerCase();
+        newState.mailOptions[name] = value.toLowerCase();
         const validEmailRegex = RegExp(
           /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
         );
         newState.errors[name] = !validEmailRegex.test(value)
           ? "Invalid email address."
           : "";
+          newState.mailOptions[name] = value;
         break;
       case "phone":
         const validPhoneRegex = RegExp(
@@ -46,13 +50,18 @@ class Contact extends Component {
         newState[name] = value;
 
         break;
+      case "subject":
+        newState.mailOptions[name] = value;
+        break;
       case "text":
         newState.errors[name] =
           value.length < 10 ? "Message must be at least 10 characters." : "";
+        newState.mailOptions[name] = value;
+        break;
       default:
         newState[name] = value;
     }
-
+    console.log(newState);
     this.setState(newState);
   };
   handleSubmit = (e) => {
@@ -75,12 +84,12 @@ class Contact extends Component {
     }
 
     API.postEmail(newState).then((res) => {
-      newState.from = "";
+      newState.mailOptions.from = "";
       newState.firstName = "";
       newState.lastName = "";
       newState.phone = "";
-      newState.subject = "";
-      newState.text = "";
+      newState.mailOptions.subject = "";
+      newState.mailOptions.text = "";
       this.setState(newState);
       notify("Email Sent", "far fa-envelope");
     });
@@ -119,7 +128,7 @@ class Contact extends Component {
                   type="text"
                   className="form-control mb-3"
                   placeholder="Email Address"
-                  value={this.state.from}
+                  value={this.state.mailOptions.from}
                   onChange={this.handleOnChange}
                 ></input>
                 <input
@@ -135,7 +144,7 @@ class Contact extends Component {
                   type="text"
                   className="form-control mb-3"
                   placeholder="Subject"
-                  value={this.state.subject}
+                  value={this.state.mailOptions.subject}
                   onChange={this.handleOnChange}
                 ></input>
                 <textarea
@@ -143,7 +152,7 @@ class Contact extends Component {
                   className="form-control mb-4"
                   rows="4"
                   placeholder="Message..."
-                  value={this.state.text}
+                  value={this.state.mailOptions.text}
                   onChange={this.handleOnChange}
                 ></textarea>
                 <button

@@ -7,6 +7,8 @@ import ProductSummary from "../components/ProductSummary";
 
 class Order extends Component {
   state = {
+    page: "order",
+    settings: {},
     breadcrumb: { categories: [], categoryName: "", products: [] },
     allProducts: [],
     category: 0,
@@ -43,6 +45,7 @@ class Order extends Component {
       },
     },
   };
+
   componentDidMount() {
     let newState = this.state;
 
@@ -52,16 +55,15 @@ class Order extends Component {
       API.getCategories(),
     ])
       .then(([sets, prods, cats]) => {
-        newState.tax = sets.data[0].taxRate;
+        newState.settings = sets.data[0];
+        newState.tax = newState.settings.taxRate;
         newState.allProducts = prods.data;
 
         // Filter categories to show only active categories with products
         let prodCats = prods.data.map((prod) => prod.CategoryId);
         newState.breadcrumb.categories = cats.data.filter(
           (cat) => cat.active && prodCats.includes(cat.id)
-        );
-        console.log("Here comes the fing shit show");
-        console.log(cats);
+        );       
         this.updateState(newState);
       })
       .catch((err) => {
@@ -180,34 +182,24 @@ class Order extends Component {
   handleSaveOrder = (e) => {
     e.preventDefault();
     const newState = this.state;
-    const errors = Object.values(newState.user.errors).filter(err => err.length > 0);
-    
-    // if (
-    //   Object.keys(newState.user.errors).filter(
-    //     (key) => newState.user.errors[key].length > 0
-    //   ).length > 0
-    // ) {
-    //   return;
+    const errors = Object.values(newState.user.errors).filter(
+      (err) => err.length > 0
+    );
 
-    // }
-    if(!errors.length){
-      
-      // if(!newState.from.length){ errors.push("Email Address is required.")}
-      // if(!newState.text.length){ errors.push("Message is required.")}
+    if (errors.length) {
+      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`));
+      console.log(msg);
+      notify(msg, "fas fa-exclamation-circle");
+      return;
     }
-   
-    if(errors.length){
-      let msg = errors.reduce((msg, err) => msg.concat(`\n${err}`) )
-      console.log(msg)
-      notify(msg, "fas fa-exclamation-circle")
-      return
-    }    
 
-    newState.isCheckingOut = false;
-    newState.isSubmitted = true;
-    newState.cart = [];
+    API.postEmail(newState).then((res) => {
+      newState.isCheckingOut = false;
+      newState.isSubmitted = true;
+      newState.cart = [];
 
-    this.updateState(newState);
+      this.updateState(newState);
+    });
   };
   handleUserUpdate = (e) => {
     const newState = this.state;
