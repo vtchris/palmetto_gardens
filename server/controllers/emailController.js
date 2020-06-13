@@ -24,11 +24,11 @@ sendContact = (mailData) => {
     })
 
 }
-sendOrder = (mailOptions) => {
+sendOrder = (mailData) => {
     fs.readFile(__dirname + '/../emailTemplates/order.html', 'utf8', function (err, HTML) {
         if (err) console.log(err);
 
-        const { cart, invoice, settings, user } = mailOptions;
+        const { cart, invoice, settings, user, mailOptions } = mailData;
 
         HTML = HTML.replace(/{FROM}/ig, `<li>${user.email}</li>`)
         HTML = HTML.replace(/{NAME}/i, `<li>${user.firstName} ${user.lastName}</li>`)
@@ -41,7 +41,7 @@ sendOrder = (mailOptions) => {
         )       
         HTML = HTML.replace(/{CSZ}/i, `<li>${user.city}, ${user.state} ${user.zip}</li>`)
         let orderTable = ""
-        cart.forEach(item => orderTable += `<tr><td style="text-align: left">${item.itm_name}</td><td style="text-align: right">$${item.itm_prc}</td><td style="text-align: right">${item.qty}</td><td style="text-align: right">$${item.itm_prc * item.qty}</td></tr>\n`)
+        cart.forEach(item => orderTable += `<tr><td style="text-align: left">${item.itm_name}</td><td style="text-align: right">$${item.itm_prc.toFixed(2)}</td><td style="text-align: right">${item.qty}</td><td style="text-align: right">$${(item.itm_prc * item.qty).toFixed(2)}</td></tr>\n`)
         HTML = HTML.replace(/{ORDER-LINEITEMS}/i, orderTable)
         let totals = ""
         if(invoice.tax){
