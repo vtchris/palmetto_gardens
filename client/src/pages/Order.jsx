@@ -20,6 +20,12 @@ class Order extends Component {
     invoice: {},
     isCheckingOut: false,
     isSubmitted: false,
+    mailOptions: {
+      to:'',
+      from: '',
+      bcc: '',
+      subject: 'Order Request'
+    },
     user: {
       firstName: "",
       lastName: "",
@@ -30,7 +36,7 @@ class Order extends Component {
       zip: "",
       phone: "",
       email: "",
-      notes: "",
+      notes: "",   
       errors: {
         firstName: "First Name is required.",
         lastName: "Last Name is required.",
@@ -57,6 +63,8 @@ class Order extends Component {
       .then(([sets, prods, cats]) => {
         newState.settings = sets.data[0];
         newState.tax = newState.settings.taxRate;
+        newState.mailOptions.from = `${newState.settings.companyName} <${newState.settings.email}>`
+        newState.mailOptions.bcc = newState.settings.email;
         newState.allProducts = prods.data;
 
         // Filter categories to show only active categories with products
@@ -193,7 +201,10 @@ class Order extends Component {
       return;
     }
 
+    newState.mailOptions.to = newState.user.email;
+
     API.postEmail(newState).then((res) => {
+      notify("Order Submitted", "far fa-envelope");
       newState.isCheckingOut = false;
       newState.isSubmitted = true;
       newState.cart = [];
