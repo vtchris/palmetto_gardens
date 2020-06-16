@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const articlesController = require("../controllers/articlesController");
 const categoryController = require("../controllers/categoryController");
+const customerController = require("../controllers/customerController");
 const emailController = require("../controllers/emailController");
 const productsController = require("../controllers/productController");
 const settingController = require("../controllers/settingController");
@@ -10,6 +11,9 @@ router.route("/articles")
 
 router.route("/categories")
     .get(categoryController.findAll)
+
+router.route("/customers")
+    .post(customerController.findOrCreate)
 
 router.route("/email")
     .post(emailController.send)

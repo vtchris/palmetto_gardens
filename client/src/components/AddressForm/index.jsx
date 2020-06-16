@@ -57,10 +57,10 @@ function AddressForm(props) {
         <div className="col col-6">
           <input
             type="text"
-            name="zip"
+            name="zipCode"
             className="form-control mb-2"
             placeholder="Zip Code"
-            value={props.user.zip}
+            value={props.user.zipCode}
             onChange={props.onUserChange}
           ></input>
         </div>
@@ -75,10 +75,10 @@ function AddressForm(props) {
       ></input>
       <input
         type="text"
-        name="phone"
+        name="phone1"
         className="form-control mb-2"
         placeholder="Phone Number"
-        value={props.user.phone}
+        value={props.user.phone1}
         onChange={props.onUserChange}
       ></input>
       <textarea

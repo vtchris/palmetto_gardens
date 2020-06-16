@@ -3,7 +3,7 @@ module.exports = function (sequlize, DataTypes) {
         customer_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoincrement: true
+            autoIncrement: true
         },
         firstName: {
             type: DataTypes.STRING(75),
@@ -30,7 +30,7 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.STRING(75),
             allowNull: true,
             validate: {
-                len: [5, 75]
+                len: [0, 75]
             }
         },
         city: {
@@ -59,12 +59,20 @@ module.exports = function (sequlize, DataTypes) {
             allowNull: false,
             isEmail:true
         },
-        phone: {
+        phone1: {
             type: DataTypes.STRING(20),
             allowNull: true,
             validate: {
                 len: [0, 20]
             }
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         }
     
     })
