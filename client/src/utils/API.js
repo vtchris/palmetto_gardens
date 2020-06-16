@@ -13,6 +13,9 @@ export default {
     getSettings: function(){
         return axios.get('/api/settings')
     },
+    postCustomer: function(customer){
+        return axios.post('/api/customers', customer)
+    },
     postEmail: function(emailData){
         return axios.post('/api/email', emailData)
     }

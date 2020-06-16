@@ -33,8 +33,8 @@ class Order extends Component {
       address2: "",
       city: "",
       state: "",
-      zip: "",
-      phone: "",
+      zipCode: "",
+      phone1: "",
       email: "",
       notes: "",   
       errors: {
@@ -44,8 +44,8 @@ class Order extends Component {
         address2: "",
         city: "City is required.",
         state: "State is required.",
-        zip: "Zip code is required.",
-        phone: "Phone number is required.",
+        zipCode: "Zip code is required.",
+        phone1: "Phone number is required.",
         email: "Email is required.",
         notes: "",
       },
@@ -202,6 +202,10 @@ class Order extends Component {
     }
 
     newState.mailOptions.to = newState.user.email;
+    // Make a copy of the user object without mutating the original
+    const customer = Object.assign({}, newState.user);
+    delete customer.errors;
+    delete customer.notes;
 
     API.postEmail(newState).then((res) => {
       notify("Order Submitted", "far fa-envelope");
@@ -211,6 +215,12 @@ class Order extends Component {
 
       this.updateState(newState);
     });
+
+    API.postCustomer(customer).then(res => {
+      console.log(res)
+    })
+
+
   };
   handleUserUpdate = (e) => {
     const newState = this.state;
@@ -237,7 +247,7 @@ class Order extends Component {
         user.errors[name] =
           value.length !== 2 ? "State must be 2 characters." : "";
         break;
-      case "zip":
+      case "zipCode":
         const validZipRegex = RegExp(/^\d{5}(?:[-\s]\d{4})?$/);
         user.errors[name] = !validZipRegex.test(value)
           ? "Invalid zip code."
@@ -252,7 +262,7 @@ class Order extends Component {
           ? "Invalid email address."
           : "";
         break;
-      case "phone":
+      case "phone1":
         const validPhoneRegex = RegExp(
           /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
         );
@@ -321,8 +331,8 @@ class Order extends Component {
                 </button>
                 {this.state.category ? (
                   <>
-                    {" "}
-                    >{" "}
+                    {/* {" "}
+                    >{" "} */}
                     <button
                       data-id="prods"
                       className="btn btn-link btn-lg"
