@@ -216,9 +216,11 @@ class Order extends Component {
       this.updateState(newState);
     });
 
-    API.postCustomer(customer).then(res => {
-      console.log(res)
-    })
+    console.log(this.state.invoice)
+
+    // API.postCustomer(customer).then(res => {
+    //   console.log(res)
+    // })
 
 
   };
@@ -303,9 +305,9 @@ class Order extends Component {
     const nontaxable = this.totalItems(newState.cart, false);
     const total = (+taxable + +tax + +nontaxable).toFixed(2);
     const invoice = {
-      subtotal: (+taxable + +nontaxable).toFixed(2),
-      tax: tax,
-      total: total,
+      inv_subtotal: (+taxable + +nontaxable).toFixed(2),
+      inv_tax: tax,
+      inv_total: total
     };
     newState.invoice = invoice;
     this.updateState(newState);
