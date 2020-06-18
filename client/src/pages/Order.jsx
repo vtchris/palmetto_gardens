@@ -206,6 +206,7 @@ class Order extends Component {
     const customer = Object.assign({}, newState.user);
     delete customer.errors;
     delete customer.notes;
+    const invoice = Object.assign({}, newState.invoice);
 
     API.postEmail(newState).then((res) => {
       notify("Order Submitted", "far fa-envelope");
@@ -216,11 +217,12 @@ class Order extends Component {
       this.updateState(newState);
     });
 
-    console.log(this.state.invoice)
-
-    // API.postCustomer(customer).then(res => {
-    //   console.log(res)
-    // })
+    API.postCustomer(customer).then(res => {
+      console.log('*************Resp')
+      invoice.customer_id = res.data.customer_id;
+      console.log(invoice)
+      API.postInvoice(invoice).catch(err => console.log(err))
+    })
 
 
   };
@@ -333,8 +335,8 @@ class Order extends Component {
                 </button>
                 {this.state.category ? (
                   <>
-                    {/* {" "}
-                    >{" "} */}
+                    {/* This adds the > between category when appropriate */}                    
+                    {" > "}
                     <button
                       data-id="prods"
                       className="btn btn-link btn-lg"

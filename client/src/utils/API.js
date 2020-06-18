@@ -18,6 +18,9 @@ export default {
     },
     postEmail: function(emailData){
         return axios.post('/api/email', emailData)
+    },
+    postInvoice: function(invoice){
+        return axios.post('/api/invoice', invoice)
     }
 }
 
