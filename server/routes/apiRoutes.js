@@ -3,6 +3,7 @@ const articlesController = require("../controllers/articlesController");
 const categoryController = require("../controllers/categoryController");
 const customerController = require("../controllers/customerController");
 const emailController = require("../controllers/emailController");
+const invoiceController = require("../controllers/invoiceController");
 const productsController = require("../controllers/productController");
 const settingController = require("../controllers/settingController");
 
@@ -17,6 +18,9 @@ router.route("/customers")
 
 router.route("/email")
     .post(emailController.send)
+
+router.route("/invoice")
+    .post(invoiceController.create)
 
 router.route("/products/active")
     .get(productsController.findActive)

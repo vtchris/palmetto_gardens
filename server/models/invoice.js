@@ -16,17 +16,17 @@ module.exports = function (sequlize, DataTypes) {
             defaultValue: 'O'
         },
         inv_subtotal: {
-            type: DataTypes.DECIMAL(15,2),
+            type: DataTypes.DECIMAL(15, 2),
             allowNull: false,
             defaultValue: 0
         },
         inv_tax: {
-            type: DataTypes.DECIMAL(15,2),
+            type: DataTypes.DECIMAL(15, 2),
             allowNull: false,
             defaultValue: 0
         },
         inv_total: {
-            type: DataTypes.DECIMAL(15,2),
+            type: DataTypes.DECIMAL(15, 2),
             allowNull: false,
             defaultValue: 0
         },
@@ -42,6 +42,20 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.DATE,
             defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         }
+    }, {
+        hooks: {
+            beforeCreate: function (invoice) {
+                return new Promise((resolve, reject) => {
+                    Invoice.max('inv_nbr').then(res => {
+                        if(!res) {res = 999}
+                        invoice.inv_nbr = ++res;
+                        return resolve(invoice)
+                    }).catch(err => {
+                        return reject(err);
+                    })
+                })
+            }
+        }
     })
     Invoice.associate = function (models) {
         Invoice.belongsTo(models.Customer, {
@@ -51,5 +65,6 @@ module.exports = function (sequlize, DataTypes) {
             }
         })
     }
+
     return Invoice;
 }
