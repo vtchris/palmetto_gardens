@@ -1,7 +1,7 @@
 module.exports = function (sequlize, DataTypes) {
     const Products = sequlize.define("Products", {
         itm_name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(75),
             allowNull: false
         },
         itm_nbr: {
