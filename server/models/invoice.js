@@ -1,3 +1,5 @@
+const invoice_line = require("./invoice_line")
+
 module.exports = function (sequlize, DataTypes) {
     const Invoice = sequlize.define("Invoice", {
         inv_id: {
@@ -63,6 +65,9 @@ module.exports = function (sequlize, DataTypes) {
                 name: "customer_id",
                 allowNull: false
             }
+        }),
+        Invoice.hasMany(models.Invoice_line, {
+            onDelete: "cascade"
         })
     }
 
