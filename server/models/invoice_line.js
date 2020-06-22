@@ -27,7 +27,7 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
-        inv_ln_ext:{
+        inv_ln_ext: {
             type: DataTypes.DOUBLE,
             allowNull: false,
             defaultValue: 0
@@ -56,18 +56,16 @@ module.exports = function (sequlize, DataTypes) {
     })
     Invoice_line.associate = function (models) {
         Invoice_line.belongsTo(models.Invoice, {
-            foreignKey: {
-                name: "inv_id",
-                allowNull: false
-            }
+            foreignKey: "invoice_id",
+            targetKey: "inv_id",
+            allowNull: false
+        
         }),
-        Invoice_line.belongsTo(models.Products, {
-            foreignKey: {
-                name: "id",
-                as: "product_id",
+            Invoice_line.belongsTo(models.Products, {
+                foreignKey: "product_id",
+                targetKey: "id",
                 allowNull: false
-            }
-        })
+            })
     }
 
     return Invoice_line;

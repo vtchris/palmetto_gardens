@@ -206,7 +206,10 @@ class Order extends Component {
     const customer = Object.assign({}, newState.user);
     delete customer.errors;
     delete customer.notes;
-    const invoice = Object.assign({}, newState.invoice);
+    const order = {}
+    
+    order.invoice = Object.assign({}, newState.invoice);
+    order.cart = Object.assign({}, newState.cart);
 
     API.postEmail(newState).then((res) => {
       notify("Order Submitted", "far fa-envelope");
@@ -217,11 +220,9 @@ class Order extends Component {
       this.updateState(newState);
     });
 
-    API.postCustomer(customer).then(res => {
-      console.log('*************Resp')
-      invoice.customer_id = res.data.customer_id;
-      console.log(invoice)
-      API.postInvoice(invoice).catch(err => console.log(err))
+    API.postCustomer(customer).then(res => {      
+      order.invoice.customer_id = res.data.customer_id;      
+      API.postInvoice(order).catch(err => console.log(err))
     })
 
 

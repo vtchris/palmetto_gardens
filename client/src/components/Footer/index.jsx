@@ -1,8 +1,9 @@
 import React from "react";
 import "./styles.css";
 
-function Footer({ settings }) {
+function Footer({ settings = {} }) {
   const CSZ = `${settings.city}, ${settings.state} ${settings.zipCode}`;
+
   return (
     <footer className="footer text-muted mt-auto p-2">
       <div className="row mr-0">

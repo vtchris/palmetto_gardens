@@ -65,8 +65,9 @@ module.exports = function (sequlize, DataTypes) {
                 name: "customer_id",
                 allowNull: false
             }
-        }),
+        })
         Invoice.hasMany(models.Invoice_line, {
+            foreignKey: "invoice_id",
             onDelete: "cascade"
         })
     }
