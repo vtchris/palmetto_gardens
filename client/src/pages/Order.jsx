@@ -94,10 +94,14 @@ class Order extends Component {
     if (idx > -1) {
       // If item is in cart, update qty
       console.log(idx);
-      newState.cart[idx].qty = +this.state.qty;
+      newState.cart[idx].product_id = newState.cart[idx].id;
+      newState.cart[idx].itm_qty = +this.state.qty;
+      newState.cart[idx].inv_ln_ext = (+this.state.qty * newState.cart[idx].itm_prc).toFixed(2);
     } else {
       // Add the qty key with the requested qty
-      item.qty = +this.state.qty;
+      item.product_id = item.id;
+      item.itm_qty = +this.state.qty;
+      item.inv_ln_ext = (item.itm_qty * item.itm_prc).toFixed(2);
       newState.cart.push(item);
     }
     this.updateInvoice(newState);
@@ -157,7 +161,7 @@ class Order extends Component {
     const item = newState.cart[idx];
     newState.category = item.CategoryId;
     newState.product = [item];
-    newState.qty = item.qty;
+    newState.qty = item.itm_qty;
     newState.breadcrumb = this.getCategoryProds(newState);
     this.updateState(newState);
   };
@@ -209,7 +213,12 @@ class Order extends Component {
     const order = {}
     
     order.invoice = Object.assign({}, newState.invoice);
-    order.cart = Object.assign({}, newState.cart);
+    order.cart = Object.assign([], newState.cart);
+    
+    API.postCustomer(customer).then(res => {      
+      order.invoice.customer_id = res.data.customer_id;      
+      API.postInvoice(order).catch(err => console.log(err))
+    })
 
     API.postEmail(newState).then((res) => {
       notify("Order Submitted", "far fa-envelope");
@@ -219,12 +228,6 @@ class Order extends Component {
 
       this.updateState(newState);
     });
-
-    API.postCustomer(customer).then(res => {      
-      order.invoice.customer_id = res.data.customer_id;      
-      API.postInvoice(order).catch(err => console.log(err))
-    })
-
 
   };
   handleUserUpdate = (e) => {
@@ -295,10 +298,11 @@ class Order extends Component {
     return newState.breadcrumb;
   };
   totalItems = (items, taxable) => {
+    
     // Filter and total items based on taxable status
     const total = items
       .filter((item) => (taxable ? item.taxable : !item.taxable))
-      .reduce((t, item) => t + +(item.itm_prc * item.qty).toFixed(2), 0);
+      .reduce((t, item) => t + +(item.itm_prc * item.itm_qty).toFixed(2), 0);
     return total;
   };
   updateInvoice = (newState) => {
