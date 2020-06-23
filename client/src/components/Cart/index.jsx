@@ -45,7 +45,7 @@ function Cart(props) {
                   key={itm.id}
                   id={itm.id}
                   name={itm.itm_name}
-                  qty={itm.qty}
+                  qty={itm.itm_qty}
                   prc={itm.itm_prc}
                   taxable={itm.taxable}
                   onDelete={props.lineDelete}
