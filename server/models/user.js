@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-
 module.exports = function (sequlize, DataTypes) {
     const User = sequlize.define("User", {
         userId: {
@@ -20,11 +18,11 @@ module.exports = function (sequlize, DataTypes) {
             validate: {
                 len: [2, 75]
             }
-        },
+        },        
         email: {
             type: DataTypes.STRING(75),
             allowNull: false,
-            isEmail: true
+            isEmail:true
         },
         phone1: {
             type: DataTypes.STRING(20),
@@ -49,13 +47,7 @@ module.exports = function (sequlize, DataTypes) {
             type: DataTypes.DATE,
             defaultValue: sequlize.literal('CURRENT_TIMESTAMP')
         }
-
+    
     })
-    User.prototype.generateHash = function (password) {
-        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-    }
-    User.prototype.validPassword = function (password) {
-        return bcrypt.compareSync(password, this.password);
-    }
     return User;
 }

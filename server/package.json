@@ -4,11 +4,15 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cookie-session": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
     "mysql2": "^2.1.0",
     "nodemailer": "^6.4.8",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "sequelize": "^5.21.7"
   },
   "devDependencies": {
@@ -21,7 +25,7 @@
     "build": "cd ../client && npm run build",
     "client": "cd ../client && npm run start",
     "heroku-postbuild": "npm run build",
-    "install": "cd ../client && npm install",    
+    "install": "cd ../client && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
