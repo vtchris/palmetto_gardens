@@ -6,6 +6,12 @@ const emailController = require("../controllers/emailController");
 const invoiceController = require("../controllers/invoiceController");
 const productsController = require("../controllers/productController");
 const settingController = require("../controllers/settingController");
+const userController = require("../controllers/userController");
+const passport = require("../passport");
+
+// passport.authenticate("local-signUp", () => {
+
+// })
 
 router.route("/articles")
     .get(articlesController.findAll)
@@ -27,5 +33,18 @@ router.route("/products/active")
 
 router.route("/settings")
     .get(settingController.findAll)
+
+// router.post("/user/login", passport.authenticate("local-signup", {
+//     successRedirect: "/order",
+//     failureRedirect: "/produce",
+//     session: false
+// }))
+router.post("/user/login", (req, res) => passport.authenticate("local-signup", {
+    successRedirect: "/order",
+    failureRedirect: "/produce",
+    session: false
+})(req,res))
+//.post(userController.login)
+// .put(userController.update)
 
 module.exports = router;

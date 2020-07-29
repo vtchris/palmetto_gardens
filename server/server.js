@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const apiRoutes = require("./routes/apiRoutes");
+const passport = require("./passport");
 
 const app = express();
 // Requiring our models for syncing
@@ -15,6 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static("public"));
+
+app.use(passport.initialize());
+//app.use(passport.session());
 
 // Root get route
 app.get("/", function (req, res) {
