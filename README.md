@@ -4,8 +4,8 @@
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
-  <a href="https://twitter.com/vtchris" target="_blank">
-    <img alt="Twitter: vtchris" src="https://img.shields.io/twitter/follow/vtchris.svg?style=social" />
+  <a href="https://twitter.com/vtchris_2357" target="_blank">
+    <img alt="Twitter: vtchris_2357" src="https://img.shields.io/twitter/follow/vtchris_2357.svg?style=social" />
   </a>
 </p>
 
@@ -34,6 +34,7 @@
   <li>Axios</li>
   <li>Express</li>
   <li>Nodemailer</li>
+  <li>Passport<li>
   <li>Sequelize</li> 
 </ul>
 
