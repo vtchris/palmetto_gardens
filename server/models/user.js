@@ -32,7 +32,7 @@ module.exports = function (sequlize, DataTypes) {
             }
         },
         password: {
-            type: DataTypes.STRING(30),
+            type: DataTypes.STRING(255),
             allowNull: true
         },
         isActive: {
