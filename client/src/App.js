@@ -32,7 +32,7 @@ class App extends Component {
             <Route exact path="/order" component={Order}/>            
             <Route exact path="/produce" component={Produce} />
             <Route exact path="/services" component={Services} />
-            <Route path="/admin" component={Admin} />
+            <Route path="/admin" component={Admin} /> 
           </Switch>
         </Router>
         <Footer 

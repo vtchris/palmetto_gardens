@@ -1,50 +1,42 @@
 const router = require("express").Router();
-const articlesController = require("../controllers/articlesController");
-const categoryController = require("../controllers/categoryController");
-const customerController = require("../controllers/customerController");
-const emailController = require("../controllers/emailController");
-const invoiceController = require("../controllers/invoiceController");
-const productsController = require("../controllers/productController");
-const settingController = require("../controllers/settingController");
-//const userController = require("../controllers/userController");
-//const passport = require("../passport");
-
-// passport.authenticate("local-signUp", () => {
-
-// })
+const ac = require("../controllers/articlesController");
+const authc = require("../controllers/authenticationController");
+const catc = require("../controllers/categoryController");
+const cc = require("../controllers/customerController");
+const ec = require("../controllers/emailController");
+const ic = require("../controllers/invoiceController");
+const pc = require("../controllers/productController");
+const sc = require("../controllers/settingController");
+const uc = require("../controllers/userController");
 
 router.route("/articles")
-    .get(articlesController.findAll)
+    .get(ac.findAll)
 
 router.route("/categories")
-    .get(categoryController.findAll)
+    .get(catc.findAll)
 
 router.route("/customers")
-    .post(customerController.findOrCreate)
+    .post(cc.findOrCreate)
 
 router.route("/email")
-    .post(emailController.send)
+    .post(ec.send)
 
 router.route("/invoice")
-    .post(invoiceController.create)
+    .post(ic.create)
+
+router.route("/login")
+    .post(authc.login)
+
+router.route("/logout")
+    .post(authc.logout)
 
 router.route("/products/active")
-    .get(productsController.findActive)
+    .get(pc.findActive)
 
 router.route("/settings")
-    .get(settingController.findAll)
+    .get(sc.findAll)
 
-// router.post("/user/login", passport.authenticate("local-signup", {
-//     successRedirect: "/order",
-//     failureRedirect: "/produce",
-//     session: false
-// }))
-// router.post("/user/login", (req, res) => passport.authenticate("local-signup", {
-//     successRedirect: "/order",
-//     failureRedirect: "/produce",
-//     session: false
-// })(req,res))
-//.post(userController.login)
-// .put(userController.update)
+router.route("/users")
+    .post(uc.create)
 
-module.exports = router;
+    module.exports = router;
