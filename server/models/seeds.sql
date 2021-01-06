@@ -34,3 +34,6 @@ VALUES 	('Pine needles', 100, 'assets/images/products/pinestraw.jpg', 3, 4.5, 'b
         ('Frosted Asst Fruit Bags', 500, null, 2, 4.99, '7x3.5x10.5 3.75 lbs','Christmas Fruit Baskets Home Delivered!',true,true,4),
         ('Hexagonal Bamboo Basket', 501, null, 2, 9.95, '8x7x2.5 2.3 lbs','Christmas Fruit Baskets Home Delivered!',true,true,4),
         ('Firewood (seasonal)', 400, null, 25, 49, '20 cu ft',null,true,true,2);
+
+INSERT INTO users (firstName, lastName, email, phone1, password, isActive)
+VALUES ('admin','admin','palmetto.farming@gmail.com','','$2a$10$sl.tkgXl8LgiqOTLtaMDpeEFmudPIzFMyaJ2S5znkVTWlVuFukQy6',True);
